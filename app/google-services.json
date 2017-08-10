@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "666991487842",
+    "firebase_url": "https://chatlover-2d1c6.firebaseio.com",
+    "project_id": "chatlover-2d1c6",
+    "storage_bucket": "chatlover-2d1c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666991487842:android:c2ea30096ddeee07",
+        "android_client_info": {
+          "package_name": "pl.applover.firebasechatsample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666991487842-n0o2op7u4sse2te4oataunkcmmk783bv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pl.applover.firebasechatsample",
+            "certificate_hash": "4c2ac6dd1edb7b06a9b0161bf432470d2cb17b2c"
+          }
+        },
+        {
+          "client_id": "666991487842-d28lf6etij3k4g3tn9co8pq3q4eauif0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBendscAEAWijsywTTEsMOkZmmoevsBmNY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "666991487842-k7coho69ggtt694d7v6dk2qb282mfns1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.testchat.QuickChat"
+              }
+            },
+            {
+              "client_id": "666991487842-d28lf6etij3k4g3tn9co8pq3q4eauif0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
