@@ -2,7 +2,7 @@ package pl.applover.firebasechatsample
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import pl.applover.firebasechat.ChannelListFragment
+import pl.applover.firebasechat.ui.ChannelListFragment
 
 class MainActivity : AppCompatActivity() {
 

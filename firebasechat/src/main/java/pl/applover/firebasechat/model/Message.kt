@@ -7,7 +7,7 @@ import android.os.Parcelable.Creator
 /**
  * Created by sp0rk on 10/08/17.
  */
-data class Message(val id: String, val sender: String, val time: String, val body: String?) : Parcelable {
+data class Message(val id: String, val sender: String, val time: String, val body: String? = null) : Parcelable {
 
     //Parcelable implementation
     constructor(parcel: Parcel) : this(
