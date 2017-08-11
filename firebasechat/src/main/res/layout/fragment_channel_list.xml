@@ -6,6 +6,7 @@
     tools:context="pl.applover.firebasechat.ui.channel_list.ChannelListFragment">
 
     <android.support.v7.widget.RecyclerView
+        android:layout_margin="8dp"
         android:id="@+id/list_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

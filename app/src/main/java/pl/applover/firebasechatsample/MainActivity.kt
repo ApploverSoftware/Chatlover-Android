@@ -11,7 +11,8 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
     override fun onChatRequested(channelId: String) {
         supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.container, ChatFragment.newInstance(channelId).withListener(this))
+                .add(R.id.container, ChatFragment.newInstance(channelId).withListener(this))
+                .addToBackStack("asdads")
                 .commit()
     }
 
@@ -22,5 +23,10 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
                 .beginTransaction()
                 .add(R.id.container, ChannelListFragment.newInstance().withListener(this))
                 .commit()
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount>0)
+            supportFragmentManager.popBackStack()
     }
 }

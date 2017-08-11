@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/channel_list_divider"
-    tools:context="pl.applover.firebasechat.ui.channel_list.ChannelListAdapter$ChannelViewHolder"
     android:paddingBottom="1dp">
 
     <RelativeLayout

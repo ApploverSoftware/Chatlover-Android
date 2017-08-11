@@ -7,8 +7,16 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.firebase.ui.database.FirebaseRecyclerAdapter
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_channel_list.*
 import pl.applover.firebasechat.R
+import pl.applover.firebasechat.model.Channel
+import pl.applover.firebasechat.model.Message
 import pl.applover.firebasechat.ui.channel_list.ChannelHolder.OnChannelClickListener
 
 /**
@@ -41,5 +49,10 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
 
     interface ChannelListListener {
         fun onChatRequested(channelId: String)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (recyclerView.adapter as? FirebaseRecyclerAdapter<*, *>)?.cleanup()
     }
 }

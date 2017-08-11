@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.firebase.ui.database.FirebaseRecyclerAdapter
 import kotlinx.android.synthetic.main.fragment_chat.*
 import pl.applover.firebasechat.R
 
@@ -42,6 +43,11 @@ class ChatFragment : Fragment() {
             return fragment
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (recyclerView.adapter as? FirebaseRecyclerAdapter<*,*>)?.cleanup()
     }
 
     interface ChatListener

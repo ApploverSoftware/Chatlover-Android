@@ -27,8 +27,8 @@ class ChannelHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(channel: Channel, position: Int, storage: StorageReference, listener: OnChannelClickListener) {
         name?.text = channel.name
-        lastMsg?.text = channel.messages[0].body
-        time?.text = channel.messages[0].time.toString()
+        lastMsg?.text = channel.messages.last().body
+        time?.text = channel.messages.last().time.toString()
         channel.picture?.let {
             Glide.with(icon?.context)
                     .using(FirebaseImageLoader())
@@ -42,7 +42,7 @@ class ChannelHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         fun getAdapter(listener: OnChannelClickListener) =
                 object : FirebaseRecyclerAdapter<Channel, ChannelHolder>(
                         Channel::class.java,
-                        R.layout.item_message,
+                        R.layout.item_channel_list,
                         ChannelHolder::class.java,
                         FirebaseDatabase.getInstance().reference.child("channels")) {
                     override fun populateViewHolder(viewHolder: ChannelHolder?, model: Channel?, position: Int) {
