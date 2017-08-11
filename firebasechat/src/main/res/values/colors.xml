@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="channel_list_divider">#8000</color>
+    <color name="channel_list_item_background">#fff</color>
+    <color name="chat_bottom_bar_background">#ddd</color>
+    <color name="chat_input_background">#fff</color>
+</resources>

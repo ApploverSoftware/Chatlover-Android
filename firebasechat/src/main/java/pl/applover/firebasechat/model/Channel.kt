@@ -6,14 +6,15 @@ import android.os.Parcelable
 /**
  * Created by sp0rk on 10/08/17.
  */
-class Channel(val id: String, val name: String, val users: List<String>, val messages: List<Message>) : Parcelable {
+class Channel(val id: String, val name: String, val users: List<String>, val messages: List<Message>, val picture: String? = null) : Parcelable {
 
     //Parcelable implementation
     constructor(parcel: Parcel) : this(
             id = parcel.readString(),
             name = parcel.readString(),
             users = ArrayList<String>(),
-            messages = ArrayList<Message>()) {
+            messages = ArrayList<Message>(),
+            picture = parcel.readString()) {
         parcel.readStringList(users)
         parcel.readTypedList(messages, Message.CREATOR)
     }
@@ -22,6 +23,7 @@ class Channel(val id: String, val name: String, val users: List<String>, val mes
         dest?.writeString(name)
         dest?.writeStringList(users)
         dest?.writeTypedList(messages)
+        dest?.writeString(picture)
     }
     override fun describeContents() = 0
     companion object CREATOR : Parcelable.Creator<Channel> {

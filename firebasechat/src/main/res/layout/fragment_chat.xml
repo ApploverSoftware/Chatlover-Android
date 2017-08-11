@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_above="@id/chat_bottom_bar"
+        android:id="@+id/chat_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/chat_bottom_bar"
+        android:layout_width="match_parent"
+        android:background="@color/chat_bottom_bar_background"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/chat_input_field"
+            android:layout_margin="8dp"
+            android:layout_toLeftOf="@+id/chat_send_btn"
+            android:layout_width="wrap_content"
+            android:maxLines="4"
+            android:background="@color/chat_input_background"
+            android:layout_height="wrap_content"
+            android:hint="Type Something..."/>
+
+        <ImageView
+            android:layout_alignParentRight="true"
+            android:id="@+id/chat_send_btn"
+            android:layout_margin="8dp"
+            android:src="@drawable/ic_send_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
