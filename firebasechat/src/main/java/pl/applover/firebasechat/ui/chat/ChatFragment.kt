@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import kotlinx.android.synthetic.main.fragment_chat.*
 import pl.applover.firebasechat.R
-import pl.applover.firebasechat.model.MockData
 
 /**
  * Created by sp0rk on 11/08/17.
@@ -18,22 +17,18 @@ import pl.applover.firebasechat.model.MockData
 class ChatFragment : Fragment() {
     var listener: ChatListener? = null
     val recyclerView: RecyclerView by lazy { chat_recycler_view }
-    val messages by lazy {
-        MockData.channels.find { it.id == arguments.getString("channelId") }?.messages
-    }
+    val channelId by lazy { arguments.getString("channelId") }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater?.inflate(R.layout.fragment_chat, container, false)
-        Toast.makeText(context, arguments.getString("channelId"), Toast.LENGTH_SHORT).show()
         return root
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        recyclerView.layoutManager = LinearLayoutManager(context)
-//        recyclerView.adapter = ChatAdapter(messages)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = MessageHolder.getAdapter(channelId)
     }
-
 
     fun withListener(listener: ChatListener) = this.also { this.listener = listener }
 

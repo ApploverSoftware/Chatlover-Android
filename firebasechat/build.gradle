@@ -43,6 +43,8 @@ dependencies {
 
     compile 'com.firebaseui:firebase-ui-storage:2.0.1'
 
+    compile 'com.firebaseui:firebase-ui-database:2.0.1'
+
 
 }
 repositories {

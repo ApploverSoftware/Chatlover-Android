@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
     override fun onChatRequested(channelId: String) {
         supportFragmentManager
                 .beginTransaction()
-                .add(R.id.container, ChatFragment.newInstance(channelId).withListener(this))
+                .replace(R.id.container, ChatFragment.newInstance(channelId).withListener(this))
                 .commit()
     }
 

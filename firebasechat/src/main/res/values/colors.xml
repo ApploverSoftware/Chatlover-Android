@@ -4,4 +4,5 @@
     <color name="channel_list_item_background">#fff</color>
     <color name="chat_bottom_bar_background">#ddd</color>
     <color name="chat_input_background">#fff</color>
+    <color name="chat_recycler_view_background">#fff</color>
 </resources>
