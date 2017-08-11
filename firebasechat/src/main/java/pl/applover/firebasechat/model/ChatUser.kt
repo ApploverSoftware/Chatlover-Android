@@ -8,7 +8,7 @@ import android.os.Parcelable.Creator
  * Created by sp0rk on 10/08/17.
  */
 data class ChatUser(val uid: String, val fcmToken:String? = null, val avatar:String? = null) : Parcelable {
-
+    constructor():this("") //needed for firebase
     //Parcelable implementation
     constructor(parcel: Parcel) : this(
             uid = parcel.readString(),

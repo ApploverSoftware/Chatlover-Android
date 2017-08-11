@@ -7,8 +7,8 @@ object MockData {
     val users = listOf(ChatUser("z"), ChatUser("x"))
 
     val messages = listOf(
-            Message("1", users[0].uid, "${System.currentTimeMillis()}", "Test message"),
-            Message("2", users[1].uid, "${System.currentTimeMillis()}", "Test response"))
+            Message("1", users[0].uid, System.currentTimeMillis(), "Test message"),
+            Message("2", users[1].uid, System.currentTimeMillis(), "Test response"))
 
     val channels = mutableListOf(
             Channel("a", "Test channel 1", users.map { it.uid }, messages),

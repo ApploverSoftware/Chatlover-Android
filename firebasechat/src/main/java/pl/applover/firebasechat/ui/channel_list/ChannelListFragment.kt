@@ -9,8 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_channel_list.*
 import pl.applover.firebasechat.R
-import pl.applover.firebasechat.model.MockData
-import pl.applover.firebasechat.ui.channel_list.ChannelListAdapter.OnChannelClickListener
+import pl.applover.firebasechat.ui.channel_list.ChannelHolder.OnChannelClickListener
 
 /**
  * Created by sp0rk on 10/08/17.
@@ -27,7 +26,7 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = ChannelListAdapter(MockData.channels, this)
+        recyclerView.adapter = ChannelHolder.getAdapter(this)
     }
 
     override fun onClick(channelId: String) {

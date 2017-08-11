@@ -7,7 +7,7 @@ import android.os.Parcelable
  * Created by sp0rk on 10/08/17.
  */
 class Channel(val id: String, val name: String, val users: List<String>, val messages: List<Message>, val picture: String? = null) : Parcelable {
-
+    constructor() : this("","", emptyList(), emptyList()) //needed for Firebase
     //Parcelable implementation
     constructor(parcel: Parcel) : this(
             id = parcel.readString(),
