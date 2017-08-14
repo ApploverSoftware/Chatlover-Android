@@ -1,7 +1,10 @@
 package pl.applover.firebasechat.ui.chat
 
+import android.graphics.drawable.ColorDrawable
 import android.support.v7.widget.RecyclerView
+import android.view.Gravity
 import android.view.View
+import android.widget.FrameLayout
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.item_message.view.*
@@ -13,12 +16,31 @@ import pl.applover.firebasechat.model.Message
  */
 class MessageHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     val body = itemView?.item_message_body
+    val bubble = itemView?.item_message_bubble
+
     fun bind(message: Message, position: Int) {
         body?.text = message.body
+
+        setType(currentUserId == message.sender)
+    }
+
+    private fun setType(isOwnMsg: Boolean) {
+        with(bubble!!){
+            val p = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+            if(isOwnMsg) {
+                p.gravity = Gravity.END
+                background = ColorDrawable(resources.getColor(R.color.chat_item_bubble_own))
+            } else {
+                p.gravity = Gravity.START
+                background = ColorDrawable(resources.getColor(R.color.chat_item_bubble_other))
+            }
+            layoutParams = p
+        }
     }
 
     companion object {
-        fun getAdapter(channelId: String) = object : FirebaseRecyclerAdapter<Message, MessageHolder>(
+        lateinit var currentUserId: String
+        fun getAdapter(channelId: String, currentUserId: String) = object : FirebaseRecyclerAdapter<Message, MessageHolder>(
                 Message::class.java,
                 R.layout.item_message,
                 MessageHolder::class.java,
@@ -26,6 +48,6 @@ class MessageHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
             override fun populateViewHolder(viewHolder: MessageHolder?, model: Message?, position: Int) {
                 model?.let { viewHolder?.bind(model, position) }
             }
-        }
+        }.also { this.currentUserId = currentUserId }
     }
 }

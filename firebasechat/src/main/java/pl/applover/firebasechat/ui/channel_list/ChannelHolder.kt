@@ -27,8 +27,8 @@ class ChannelHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(channel: Channel, position: Int, storage: StorageReference, listener: OnChannelClickListener) {
         name?.text = channel.name
-        lastMsg?.text = channel.messages.last().body
-        time?.text = channel.messages.last().time.toString()
+        lastMsg?.text = channel.msgs.last().body
+        time?.text = channel.msgs.last().time.toString()
         channel.picture?.let {
             Glide.with(icon?.context)
                     .using(FirebaseImageLoader())

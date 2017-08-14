@@ -7,16 +7,18 @@ import android.os.Parcelable.Creator
 /**
  * Created by sp0rk on 10/08/17.
  */
-data class ChatUser(val uid: String, val fcmToken:String? = null, val avatar:String? = null) : Parcelable {
-    constructor():this("") //needed for firebase
+data class ChatUser(val uid: String, val name: String, val fcmToken:String? = null, val avatar:String? = null) : Parcelable {
+    constructor():this("","") //needed for firebase
     //Parcelable implementation
     constructor(parcel: Parcel) : this(
             uid = parcel.readString(),
+            name = parcel.readString(),
             fcmToken = parcel.readString(),
             avatar = parcel.readString()
     )
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeString(uid)
+        dest?.writeString(name)
         dest?.writeString(fcmToken)
         dest?.writeString(avatar)
     }
