@@ -3,10 +3,10 @@
     <color name="channel_list_divider">#8000</color>
     <color name="channel_list_item_background">#fff</color>
 
-    <color name="chat_bottom_bar_background">#ddd</color>
+    <color name="chat_bottom_bar_background">#fff</color>
     <color name="chat_input_background">#fff</color>
-    <color name="chat_recycler_view_background">#fff</color>
+    <color name="chat_recycler_view_background">#ffe</color>
 
-    <color name="chat_item_bubble_own">#f8f</color>
-    <color name="chat_item_bubble_other">#8ff</color>
+    <color name="chat_item_bubble_own">#ccc</color>
+    <color name="chat_item_bubble_other">#ff8</color>
 </resources>

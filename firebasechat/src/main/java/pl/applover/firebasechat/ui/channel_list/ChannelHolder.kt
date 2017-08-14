@@ -1,6 +1,7 @@
 package pl.applover.firebasechat.ui.channel_list
 
 import android.support.v7.widget.RecyclerView
+import android.text.format.DateUtils
 import android.view.View
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -28,7 +29,7 @@ class ChannelHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     fun bind(channel: Channel, position: Int, storage: StorageReference, listener: OnChannelClickListener) {
         name?.text = channel.name
         lastMsg?.text = channel.msgs.last().body
-        time?.text = channel.msgs.last().time.toString()
+        time?.text = DateUtils.getRelativeTimeSpanString(channel.msgs.last().time)
         channel.picture?.let {
             Glide.with(icon?.context)
                     .using(FirebaseImageLoader())

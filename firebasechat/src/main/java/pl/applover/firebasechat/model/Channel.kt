@@ -20,7 +20,7 @@ class Channel(val id: String, val name: String, val users: List<String>, val mes
     }
 
     var msgs = emptyList<Message>()
-        get() =  messages.values.toList()
+        get() =  messages.entries.sortedBy { it.key }.map { it.value }
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeString(id)

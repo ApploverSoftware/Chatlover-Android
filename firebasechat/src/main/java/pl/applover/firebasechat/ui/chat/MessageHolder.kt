@@ -18,10 +18,10 @@ class MessageHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     val body = itemView?.item_message_body
     val bubble = itemView?.item_message_bubble
 
-    fun bind(message: Message, position: Int) {
+    fun bind(message: Message, position: Int, isOwnMsg: Boolean) {
         body?.text = message.body
 
-        setType(currentUserId == message.sender)
+        setType(isOwnMsg)
     }
 
     private fun setType(isOwnMsg: Boolean) {
@@ -39,15 +39,14 @@ class MessageHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     }
 
     companion object {
-        lateinit var currentUserId: String
         fun getAdapter(channelId: String, currentUserId: String) = object : FirebaseRecyclerAdapter<Message, MessageHolder>(
                 Message::class.java,
                 R.layout.item_message,
                 MessageHolder::class.java,
                 FirebaseDatabase.getInstance().reference.child("channels").child(channelId).child("messages")) {
             override fun populateViewHolder(viewHolder: MessageHolder?, model: Message?, position: Int) {
-                model?.let { viewHolder?.bind(model, position) }
+                model?.let { viewHolder?.bind(model, position, currentUserId == model.sender) }
             }
-        }.also { this.currentUserId = currentUserId }
+        }
     }
 }
