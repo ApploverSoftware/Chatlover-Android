@@ -5,14 +5,12 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp">
 
-    <pl.applover.firebasechat.ui.RoundedFrameLayout
+    <FrameLayout
         android:id="@+id/item_message_bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:background="@color/chat_item_bubble_own"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:radius="4">
+        android:background="@drawable/chat_bubble">
 
         <TextView
             android:id="@+id/item_message_body"
@@ -21,5 +19,5 @@
             android:layout_margin="4dp"
             tools:text="TEST MSG" />
 
-    </pl.applover.firebasechat.ui.RoundedFrameLayout>
+    </FrameLayout>
 </FrameLayout>

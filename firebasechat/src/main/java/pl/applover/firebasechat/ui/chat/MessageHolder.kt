@@ -1,5 +1,6 @@
 package pl.applover.firebasechat.ui.chat
 
+import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.support.v7.widget.RecyclerView
 import android.view.Gravity
@@ -20,7 +21,6 @@ class MessageHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(message: Message, position: Int, isOwnMsg: Boolean) {
         body?.text = message.body
-
         setType(isOwnMsg)
     }
 
@@ -29,10 +29,10 @@ class MessageHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
             val p = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
             if(isOwnMsg) {
                 p.gravity = Gravity.END
-                background = ColorDrawable(resources.getColor(R.color.chat_item_bubble_own))
+                background.setColorFilter(resources.getColor(R.color.chat_item_bubble_own), PorterDuff.Mode.SRC_IN)
             } else {
                 p.gravity = Gravity.START
-                background = ColorDrawable(resources.getColor(R.color.chat_item_bubble_other))
+                background.setColorFilter(resources.getColor(R.color.chat_item_bubble_other), PorterDuff.Mode.SRC_IN)
             }
             layoutParams = p
         }

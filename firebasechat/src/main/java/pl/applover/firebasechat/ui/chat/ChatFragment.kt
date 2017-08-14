@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -34,13 +33,20 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = LinearLayoutManager(context).apply { stackFromEnd = true }
         recyclerView.adapter = MessageHolder.getAdapter(channelId, currentUserId)
 
         send.setOnClickListener {
             val db = FirebaseDatabase.getInstance().reference
             with(db.child("channels").child(channelId).child("messages").push()) {
-                ref.setValue(Message(key, currentUserId, System.currentTimeMillis(), input.text.toString()))
+                ref.setValue(Message(
+                        key,
+                        currentUserId,
+                        System.currentTimeMillis(),
+                        input.text.toString())).addOnCompleteListener {
+                    input.setText("")
+                    recyclerView.layoutManager.scrollToPosition(recyclerView.adapter.itemCount-1)
+                }
             }
         }
     }
@@ -62,7 +68,7 @@ class ChatFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (recyclerView.adapter as? FirebaseRecyclerAdapter<*,*>)?.cleanup()
+        (recyclerView.adapter as? FirebaseRecyclerAdapter<*, *>)?.cleanup()
     }
 
     interface ChatListener
