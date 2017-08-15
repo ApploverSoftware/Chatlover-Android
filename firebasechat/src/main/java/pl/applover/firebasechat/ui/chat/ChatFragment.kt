@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -28,13 +29,17 @@ class ChatFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater?.inflate(R.layout.fragment_chat, container, false)
+
+        activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+
         return root
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.layoutManager = LinearLayoutManager(context).apply { stackFromEnd = true }
-        recyclerView.adapter = MessageHolder.getAdapter(channelId, currentUserId)
+        val llm =  LinearLayoutManager(context).apply { stackFromEnd = true }
+        recyclerView.layoutManager = llm
+        recyclerView.adapter = MessageHolder.getAdapter(channelId, currentUserId, llm, recyclerView)
 
         send.setOnClickListener {
             val db = FirebaseDatabase.getInstance().reference

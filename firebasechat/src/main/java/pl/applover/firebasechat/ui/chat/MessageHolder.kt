@@ -1,7 +1,7 @@
 package pl.applover.firebasechat.ui.chat
 
 import android.graphics.PorterDuff
-import android.graphics.drawable.ColorDrawable
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Gravity
 import android.view.View
@@ -25,9 +25,9 @@ class MessageHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     }
 
     private fun setType(isOwnMsg: Boolean) {
-        with(bubble!!){
+        with(bubble!!) {
             val p = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
-            if(isOwnMsg) {
+            if (isOwnMsg) {
                 p.gravity = Gravity.END
                 background.setColorFilter(resources.getColor(R.color.chat_item_bubble_own), PorterDuff.Mode.SRC_IN)
             } else {
@@ -39,7 +39,10 @@ class MessageHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     }
 
     companion object {
-        fun getAdapter(channelId: String, currentUserId: String) = object : FirebaseRecyclerAdapter<Message, MessageHolder>(
+        fun getAdapter(channelId: String,
+                       currentUserId: String,
+                       layoutManager: LinearLayoutManager,
+                       recyclerView: RecyclerView) = object : FirebaseRecyclerAdapter<Message, MessageHolder>(
                 Message::class.java,
                 R.layout.item_message,
                 MessageHolder::class.java,
@@ -47,6 +50,19 @@ class MessageHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
             override fun populateViewHolder(viewHolder: MessageHolder?, model: Message?, position: Int) {
                 model?.let { viewHolder?.bind(model, position, currentUserId == model.sender) }
             }
+        }.apply {
+            registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                    super.onItemRangeInserted(positionStart, itemCount)
+                    val messageCount = getItemCount()
+                    val lastVisiblePosition = layoutManager.findLastCompletelyVisibleItemPosition()
+                    if (lastVisiblePosition == -1
+                            || positionStart >= messageCount - 1
+                            && lastVisiblePosition == positionStart - 1) {
+                        recyclerView.scrollToPosition(positionStart)
+                    }
+                }
+            })
         }
     }
 }
