@@ -43,7 +43,7 @@
             android:layout_toRightOf="@id/item_channel_icon"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="Bacon ipsum dolor amet spare ribs salami picanha beef pork loin tongue frankfurter beef ribs pork belly meatloaf. Drumstick rump short ribs, landjaeger andouille boudin chuck tail. Pancetta strip steak shankle prosciutto burgdoggen."
+            tools:text="Bacon ipsum dolor amet spare ribs salami picanha beef pork loin tongue frankfurter beef ribs pork belly meatloaf. Drumstick rump short ribs, landjaeger andouille boudin chuck tail. Pancetta strip steak shankle prosciutto burgdoggen."
             android:textSize="14sp" />
 
         <TextView
