@@ -1,7 +1,12 @@
 package pl.applover.firebasechatsample
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.ResultCodes
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.ChatUser
@@ -15,7 +20,7 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
     override fun onChatRequested(channelId: String) {
         supportFragmentManager
                 .beginTransaction()
-                .add(R.id.container, ChatFragment.newInstance(channelId, "-KrVgOzX-qdp7QwMDnrn").withListener(this))
+                .add(R.id.container, ChatFragment.newInstance(channelId, ChatUser.current?.uid?:"").withListener(this))
                 .addToBackStack("asdads")
                 .commit()
     }
@@ -30,13 +35,37 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
     override fun onBackPressed() {
         if (supportFragmentManager.backStackEntryCount > 0)
             supportFragmentManager.popBackStack()
+        else
+            AuthUI.getInstance().signOut(this).addOnCompleteListener {
+                finish()
+            }
     }
 
     fun init() {
-        supportFragmentManager
-                .beginTransaction()
-                .add(R.id.container, ChannelListFragment.newInstance().withListener(this))
-                .commit()
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.container, ChannelListFragment.newInstance().withListener(this))
+                    .commit()
+        } else {
+            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setIsSmartLockEnabled(false).build(), 1)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1) {
+            if (resultCode == ResultCodes.OK) {
+                FirebaseAuth.getInstance().currentUser?.let {
+                    ChatUser.loginWithUid(it.uid, it.displayName) {
+                        init()
+                    }
+                }
+            } else {
+                Toast.makeText(this, "Error logging in", Toast.LENGTH_SHORT).show()
+                init()
+            }
+        }
     }
 
     private fun addChannel() {
@@ -50,7 +79,7 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
             key
         }
         val c1 = with(db.child("channels").push()) {
-            ref.setValue(Channel(key, "Bakłażany", listOf(u1,u2), HashMap<String, Message>()))
+            ref.setValue(Channel(key, "Bakłażany", listOf(u1, u2), HashMap<String, Message>()))
             key
         }
         with(db.child("channels").child(c1).child("messages").push()) {
@@ -72,5 +101,4 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
             key
         }
     }
-
 }
