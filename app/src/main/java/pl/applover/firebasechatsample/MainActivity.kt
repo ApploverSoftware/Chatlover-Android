@@ -8,6 +8,7 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ResultCodes
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import pl.applover.firebasechat.config.NotificationsConfig
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.ChatUser
 import pl.applover.firebasechat.model.Message
@@ -20,16 +21,20 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
     override fun onChatRequested(channelId: String) {
         supportFragmentManager
                 .beginTransaction()
-                .add(R.id.container, ChatFragment.newInstance(channelId, ChatUser.current?.uid?:"").withListener(this))
+                .add(R.id.container, ChatFragment.newInstance(channelId, ChatUser.current?.uid ?: "").withListener(this))
                 .addToBackStack("asdads")
                 .commit()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        config()
         setContentView(R.layout.activity_main)
         init()
-//        addChannel()
+    }
+
+    private fun config() {
+        NotificationsConfig.notificationTarget = MainActivity::class.java
     }
 
     override fun onBackPressed() {
@@ -43,10 +48,12 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
 
     fun init() {
         if (FirebaseAuth.getInstance().currentUser != null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.container, ChannelListFragment.newInstance().withListener(this))
-                    .commit()
+            ChatUser.loginWithUid(FirebaseAuth.getInstance().currentUser!!.uid) {
+                supportFragmentManager
+                        .beginTransaction()
+                        .add(R.id.container, ChannelListFragment.newInstance().withListener(this))
+                        .commit()
+            }
         } else {
             startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setIsSmartLockEnabled(false).build(), 1)
         }
