@@ -24,14 +24,14 @@ abstract class FirebaseRecyclerAdapter<IH : ViewHolder, HH : ViewHolder, T>
         private val itemLayout: Int,
         private val headerLayout: Int,
         private val headerDecider: HeaderDecider<T>,
-        items: ArrayList<T>? = null,
-        keys: ArrayList<String>? = null)
+        items: ArrayList<T?>? = null,
+        keys: ArrayList<String?>? = null)
     : RecyclerView.Adapter<ViewHolder>() {
 
-    var items: ArrayList<T>? = null
+    var items: ArrayList<T?>? = null
         private set
 
-    var keys: ArrayList<String>? = null
+    var keys: ArrayList<String?>? = null
         private set
 
     init {
@@ -39,8 +39,8 @@ abstract class FirebaseRecyclerAdapter<IH : ViewHolder, HH : ViewHolder, T>
             this.items = items
             this.keys = keys
         } else {
-            this.items = ArrayList<T>()
-            this.keys = ArrayList<String>()
+            this.items = ArrayList<T?>()
+            this.keys = ArrayList<String?>()
         }
         initListener()
         mQuery.addChildEventListener(mListener)
@@ -61,8 +61,22 @@ abstract class FirebaseRecyclerAdapter<IH : ViewHolder, HH : ViewHolder, T>
                         keys!!.add(0, key)
                         insertedPosition = 0
                     } else {
+
                         val previousIndex = keys!!.indexOf(previousChildName)
-                        val nextIndex = previousIndex + 1
+                        val previousItem = items!![previousIndex]
+                        var nextIndex = previousIndex + 1
+
+                        val header = headerDecider.getHeader(previousItem, item)
+                        if (header != null) {
+                            if (nextIndex == items!!.size) {
+                                items!!.add(null)
+                                keys!!.add(null)
+                            } else {
+                                items!!.add(nextIndex, null)
+                                keys!!.add(nextIndex, null)
+                            }
+                            nextIndex++
+                        }
                         if (nextIndex == items!!.size) {
                             items!!.add(item)
                             keys!!.add(key)
@@ -153,12 +167,12 @@ abstract class FirebaseRecyclerAdapter<IH : ViewHolder, HH : ViewHolder, T>
     @Suppress("UNCHECKED_CAST")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         items?.let {
-            val previous = if (position > 0 && position < items!!.size) items!![position-1] else null
-            val next = if (position < items!!.size) items!![position+1] else null
+            val previous = if (position > 0 && position < items!!.size) items!![position - 1] else null
+            val next = if (position < items!!.size) items!![position + 1] else null
             if (getItemViewType(position) == HEADER)
                 populateHeader(holder as HH, previous, next)
             else
-                populateItem(holder as IH, previous, items!![position], next)
+                populateItem(holder as IH, previous, items!![position]!!, next)
         }
     }
 
@@ -172,7 +186,7 @@ abstract class FirebaseRecyclerAdapter<IH : ViewHolder, HH : ViewHolder, T>
         mQuery.removeEventListener(mListener)
     }
 
-    fun getItem(position: Int): T {
+    fun getItem(position: Int): T? {
         return items!![position]
     }
 
@@ -185,10 +199,10 @@ abstract class FirebaseRecyclerAdapter<IH : ViewHolder, HH : ViewHolder, T>
         return items != null && items!!.contains(item)
     }
 
-    protected fun itemAdded(item: T, key: String, position: Int) {}
-    protected fun itemChanged(oldItem: T, newItem: T, key: String, position: Int) {}
-    protected fun itemRemoved(item: T, key: String, position: Int) {}
-    protected fun itemMoved(item: T, key: String, oldPosition: Int, newPosition: Int) {}
+    protected fun itemAdded(item: T?, key: String, position: Int) {}
+    protected fun itemChanged(oldItem: T?, newItem: T?, key: String, position: Int) {}
+    protected fun itemRemoved(item: T?, key: String, position: Int) {}
+    protected fun itemMoved(item: T?, key: String, oldPosition: Int, newPosition: Int) {}
 
     protected fun getConvertedObject(snapshot: DataSnapshot): T {
         return snapshot.getValue(modelClass)!!
@@ -200,6 +214,6 @@ abstract class FirebaseRecyclerAdapter<IH : ViewHolder, HH : ViewHolder, T>
     }
 
     interface HeaderDecider<T> {
-        fun getHeader(previous : T?, next: T?) : String
+        fun getHeader(previous: T?, next: T?): String?
     }
 }
