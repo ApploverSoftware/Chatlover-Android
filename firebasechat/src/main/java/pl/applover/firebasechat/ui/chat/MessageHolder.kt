@@ -6,11 +6,11 @@ import android.support.v7.widget.RecyclerView
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
-import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.item_message.view.*
 import pl.applover.firebasechat.R
 import pl.applover.firebasechat.model.Message
+import pl.applover.firebasechat.ui.FirebaseRecyclerAdapter
 
 /**
  * Created by sp0rk on 11/08/17.
@@ -42,14 +42,22 @@ class MessageHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         fun getAdapter(channelId: String,
                        currentUserId: String,
                        layoutManager: LinearLayoutManager,
-                       recyclerView: RecyclerView) = object : FirebaseRecyclerAdapter<Message, MessageHolder>(
-                Message::class.java,
-                R.layout.item_message,
-                MessageHolder::class.java,
-                FirebaseDatabase.getInstance().reference.child("channels").child(channelId).child("messages")) {
-            override fun populateViewHolder(viewHolder: MessageHolder?, model: Message?, position: Int) {
-                model?.let { viewHolder?.bind(model, position, currentUserId == model.sender) }
+                       recyclerView: RecyclerView) = object : FirebaseRecyclerAdapter<MessageHolder, MessageHolder, Message>(
+                FirebaseDatabase.getInstance().reference.child("channels").child(channelId).child("messages"),
+                Message::class.java, MessageHolder::class.java, MessageHolder::class.java,
+                R.layout.item_message, R.layout.item_message,
+                object : HeaderDecider<Message> {
+                    override fun getHeader(previous: Message?, next: Message?): String? = null
+                }
+        ) {
+            override fun populateItem(holder: MessageHolder, previous: Message?, model: Message, next: Message?, position: Int) {
+                holder.bind(model, position, currentUserId == model.sender)
             }
+
+            override fun populateHeader(holder: MessageHolder, previous: Message?, next: Message?, position: Int) {
+                TODO("Implement")
+            }
+
         }.apply {
             registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {

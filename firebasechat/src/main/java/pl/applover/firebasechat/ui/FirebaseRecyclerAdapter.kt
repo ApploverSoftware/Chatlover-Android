@@ -170,15 +170,15 @@ abstract class FirebaseRecyclerAdapter<IH : ViewHolder, HH : ViewHolder, T>
             val previous = if (position > 0 && position < items!!.size) items!![position - 1] else null
             val next = if (position < items!!.size) items!![position + 1] else null
             if (getItemViewType(position) == HEADER)
-                populateHeader(holder as HH, previous, next)
+                populateHeader(holder as HH, previous, next, position)
             else
-                populateItem(holder as IH, previous, items!![position]!!, next)
+                populateItem(holder as IH, previous, items!![position]!!, next, position)
         }
     }
 
-    abstract fun populateItem(holder: IH, previous: T?, model: T, next: T?)
+    abstract fun populateItem(holder: IH, previous: T?, model: T, next: T?, position: Int)
 
-    abstract fun populateHeader(holder: HH, previous: T?, next: T?)
+    abstract fun populateHeader(holder: HH, previous: T?, next: T?, position: Int)
 
     override fun getItemCount(): Int = if (items != null) items!!.size else 0
 
