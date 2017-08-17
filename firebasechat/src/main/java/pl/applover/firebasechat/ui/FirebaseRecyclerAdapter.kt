@@ -168,7 +168,7 @@ abstract class FirebaseRecyclerAdapter<IH : ViewHolder, HH : ViewHolder, T>
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         items?.let {
             val previous = if (position > 0 && position < items!!.size) items!![position - 1] else null
-            val next = if (position < items!!.size) items!![position + 1] else null
+            val next = if (position < items!!.size-1) items!![position + 1] else null
             if (getItemViewType(position) == HEADER)
                 populateHeader(holder as HH, previous, next, position)
             else
