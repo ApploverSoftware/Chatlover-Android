@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
             key
         }
         val c1 = with(db.child("channels").push()) {
-            ref.setValue(Channel(key, "Bakłażany", listOf(u1, u2), HashMap<String, Message>()))
+            ref.setValue(Channel(key, "Bakłażany", hashMapOf(Pair(u1,u1),Pair(u2,u2)), HashMap<String, Message>()))
             key
         }
         with(db.child("channels").child(c1).child("messages").push()) {

@@ -28,9 +28,9 @@ class ChannelHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(channel: Channel, position: Int, storage: StorageReference, listener: OnChannelClickListener) {
         name?.text = channel.name
-        if (channel.msgs.isNotEmpty()) {
-            lastMsg?.text = channel.msgs.last().body
-            time?.text = DateUtils.getRelativeTimeSpanString(channel.msgs.last().time)
+        if (channel.messageList.isNotEmpty()) {
+            lastMsg?.text = channel.messageList.last().body
+            time?.text = DateUtils.getRelativeTimeSpanString(channel.messageList.last().time)
         }
         channel.picture?.let {
             Glide.with(icon?.context)
