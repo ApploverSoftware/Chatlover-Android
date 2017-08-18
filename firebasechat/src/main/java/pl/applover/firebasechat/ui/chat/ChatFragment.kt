@@ -42,15 +42,17 @@ class ChatFragment : Fragment() {
         recyclerView.adapter = ChatAdapter(channelId, currentUserId, llm, recyclerView).withAutoscroll()
 
         send.setOnClickListener {
-            val db = FirebaseDatabase.getInstance().reference
-            with(db.child("channels").child(channelId).child("messages").push()) {
-                ref.setValue(Message(
-                        key,
-                        currentUserId,
-                        System.currentTimeMillis(),
-                        input.text.toString())).addOnCompleteListener {
-                    input.setText("")
-                    recyclerView.layoutManager.scrollToPosition(recyclerView.adapter.itemCount-1)
+            if (input.text.isNotEmpty()) {
+                val db = FirebaseDatabase.getInstance().reference
+                with(db.child("channels").child(channelId).child("messages").push()) {
+                    ref.setValue(Message(
+                            key,
+                            currentUserId,
+                            System.currentTimeMillis(),
+                            input.text.toString())).addOnCompleteListener {
+                        input.setText("")
+                        recyclerView.layoutManager.scrollToPosition(recyclerView.adapter.itemCount - 1)
+                    }
                 }
             }
         }

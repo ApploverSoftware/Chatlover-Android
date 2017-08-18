@@ -89,7 +89,7 @@ abstract class HeaderedFirebaseAdapter<in IH : ViewHolder, in HH : ViewHolder, M
                 }
             }
 
-            override fun onChildChanged(snap: DataSnapshot, previousKey: String) {
+            override fun onChildChanged(snap: DataSnapshot, previousKey: String?) {
                 val key = snap.key
                 if (keys!!.contains(key)) {
                     val index = keys!!.indexOf(key)
