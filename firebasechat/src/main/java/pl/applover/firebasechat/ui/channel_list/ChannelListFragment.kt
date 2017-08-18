@@ -8,17 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
-import com.firebase.ui.database.FirebaseRecyclerAdapter
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_channel_list.*
 import pl.applover.firebasechat.R
-import pl.applover.firebasechat.model.Channel
-import pl.applover.firebasechat.model.Message
-import pl.applover.firebasechat.ui.channel_list.ChannelHolder.OnChannelClickListener
+import pl.applover.firebasechat.ui.channel_list.ChannelAdapter.ChannelHolder.OnChannelClickListener
 
 /**
  * Created by sp0rk on 10/08/17.
@@ -38,7 +30,7 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = ChannelHolder.getAdapter(this)
+        recyclerView.adapter = ChannelAdapter(this)
     }
 
     override fun onClick(channelId: String) {
@@ -57,6 +49,6 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (recyclerView.adapter as? FirebaseRecyclerAdapter<*, *>)?.cleanup()
+        (recyclerView.adapter as? ChannelAdapter)?.destroy()
     }
 }
