@@ -15,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_chat.*
 import pl.applover.firebasechat.R
 import pl.applover.firebasechat.model.Message
+import pl.applover.firebasechat.ui.HeaderedFirebaseAdapter
 
 /**
  * Created by sp0rk on 11/08/17.
@@ -39,7 +40,7 @@ class ChatFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val llm =  LinearLayoutManager(context).apply { stackFromEnd = true }
         recyclerView.layoutManager = llm
-        recyclerView.adapter = MessageHolder.getAdapter(channelId, currentUserId, llm, recyclerView)
+        recyclerView.adapter = ChatAdapter(channelId, currentUserId, llm, recyclerView).withAutoscroll()
 
         send.setOnClickListener {
             val db = FirebaseDatabase.getInstance().reference
@@ -73,7 +74,7 @@ class ChatFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (recyclerView.adapter as? FirebaseRecyclerAdapter<*, *>)?.cleanup()
+        (recyclerView.adapter as? ChatAdapter)?.destroy()
     }
 
     interface ChatListener
