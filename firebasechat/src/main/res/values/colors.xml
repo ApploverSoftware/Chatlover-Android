@@ -9,4 +9,5 @@
 
     <color name="chat_item_bubble_own">#ccc</color>
     <color name="chat_item_bubble_other">#ff8</color>
+    <color name="chat_day_header_color">#000</color>
 </resources>

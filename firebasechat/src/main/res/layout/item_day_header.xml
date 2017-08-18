@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/_day_header_left_line"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        android:layout_toLeftOf="@id/day_header_label"
+        android:background="@color/chat_day_header_color" />
+
+    <TextView
+        android:id="@+id/day_header_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="8dp"
+        android:textColor="@color/chat_day_header_color"
+        android:textSize="16sp"
+        tools:text="Thursday" />
+
+    <View
+        android:id="@+id/_day_header_right_line"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        android:layout_toRightOf="@id/day_header_label"
+        android:background="@color/chat_day_header_color" />
+
+</RelativeLayout>

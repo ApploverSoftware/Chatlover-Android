@@ -10,6 +10,7 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.Query
+import pl.applover.firebasechat.model.Message
 
 /**
  * Created by sp0rk on 17/08/17.
@@ -55,6 +56,7 @@ abstract class FirebaseRecyclerAdapter<IH : ViewHolder, HH : ViewHolder, T>
 
                 if (!keys!!.contains(key)) {
                     val item = getConvertedObject(dataSnapshot)
+                    println((item as? Message)?.body?:"ERROR")
                     val insertedPosition: Int
                     if (previousChildName == null) {
                         items!!.add(0, item)

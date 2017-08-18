@@ -42,20 +42,25 @@ class MessageHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         fun getAdapter(channelId: String,
                        currentUserId: String,
                        layoutManager: LinearLayoutManager,
-                       recyclerView: RecyclerView) = object : FirebaseRecyclerAdapter<MessageHolder, MessageHolder, Message>(
+                       recyclerView: RecyclerView) = object : FirebaseRecyclerAdapter<MessageHolder, DayHeaderHolder, Message>(
                 FirebaseDatabase.getInstance().reference.child("channels").child(channelId).child("messages"),
-                Message::class.java, MessageHolder::class.java, MessageHolder::class.java,
-                R.layout.item_message, R.layout.item_message,
+                Message::class.java, MessageHolder::class.java, DayHeaderHolder::class.java,
+                R.layout.item_message, R.layout.item_day_header,
                 object : HeaderDecider<Message> {
-                    override fun getHeader(previous: Message?, next: Message?): String? = null
+                    override fun getHeader(previous: Message?, next: Message?): String? {
+                        val p = previous?.body!![0]
+                        val n = next?.body!![0]
+                        if (n==p) return null
+                        else return  n.toString()
+                    }
                 }
         ) {
             override fun populateItem(holder: MessageHolder, previous: Message?, model: Message, next: Message?, position: Int) {
                 holder.bind(model, position, currentUserId == model.sender)
             }
 
-            override fun populateHeader(holder: MessageHolder, previous: Message?, next: Message?, position: Int) {
-                TODO("Implement")
+            override fun populateHeader(holder: DayHeaderHolder, previous: Message?, next: Message?, position: Int) {
+                holder.bind(next?.body!![0].toString())
             }
 
         }.apply {
