@@ -3,8 +3,10 @@ package pl.applover.firebasechat.ui.chat
 import android.graphics.PorterDuff
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.text.format.DateUtils
 import android.view.Gravity
 import android.view.View
+import android.widget.CalendarView
 import android.widget.FrameLayout
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.item_day_header.view.*
@@ -14,6 +16,8 @@ import pl.applover.firebasechat.model.Message
 import pl.applover.firebasechat.ui.HeaderedFirebaseAdapter
 import pl.applover.firebasechat.ui.chat.ChatAdapter.DayHeaderHolder
 import pl.applover.firebasechat.ui.chat.ChatAdapter.MessageHolder
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by sp0rk on 18/08/17.
@@ -32,7 +36,7 @@ class ChatAdapter(channelId: String,
         holder.bind(model, position, currentUserId == model.sender)
     }
     override fun populateHeader(holder: DayHeaderHolder, previous: Message?, next: Message?, position: Int) {
-        holder.bind(next?.body!![0].toString())
+        holder.bind(createDayHeaderDecider().getHeader(previous,next)?:"New messages")
     }
 
     fun withAutoscroll() = this.also {
@@ -53,10 +57,12 @@ class ChatAdapter(channelId: String,
     companion object {
         fun createDayHeaderDecider() = object : HeaderDecider<Message> {
             override fun getHeader(previous: Message?, next: Message?): String? {
-                val p = previous?.body!![0]
-                val n = next?.body!![0]
-                if (n == p) return null
-                else return n.toString()
+                val p = previous?.calendar!!
+                val n = next?.calendar!!
+                val sameYear = p.get(Calendar.YEAR) == n.get(Calendar.YEAR)
+                if (n.get(Calendar.DAY_OF_YEAR) == p.get(Calendar.DAY_OF_YEAR)) return null
+                else return SimpleDateFormat("EEE, d MMM ${if (sameYear) "" else "''yy"}",
+                        Locale.getDefault()).format(n.time)
             }
         }
     }
