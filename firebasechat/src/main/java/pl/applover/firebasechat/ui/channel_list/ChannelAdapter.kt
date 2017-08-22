@@ -55,6 +55,9 @@ class ChannelAdapter(val listener: OnChannelClickListener)
             if (channel.messageList.isNotEmpty()) {
                 lastMsg?.text = channel.messageList.last().body
                 time?.text = DateUtils.getRelativeTimeSpanString(channel.messageList.last().time)
+            } else {
+                lastMsg?.text = ""
+                time?.text = ""
             }
             channel.picture?.let {
                 Glide.with(icon?.context)
