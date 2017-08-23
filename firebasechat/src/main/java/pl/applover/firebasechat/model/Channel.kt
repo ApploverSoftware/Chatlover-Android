@@ -6,20 +6,20 @@ import android.os.Parcelable
 /**
  * Created by sp0rk on 10/08/17.
  */
-class Channel(val id: String, val name: String, val users: HashMap<String, String>, val messages: HashMap<String, Message>, val picture: String? = null) : Parcelable {
-    constructor() : this("", "", HashMap<String, String>(), HashMap<String, Message>()) //needed for Firebase
+class Channel(val id: String, val name: String, val users: HashMap<String, ChatUser>, val messages: HashMap<String, Message>, val picture: String? = null) : Parcelable {
+    constructor() : this("", "", HashMap<String, ChatUser>(), HashMap<String, Message>()) //needed for Firebase
     //Parcelable implementation
     constructor(parcel: Parcel) : this(
             id = parcel.readString(),
             name = parcel.readString(),
-            users = HashMap<String, String>(),
+            users = HashMap<String, ChatUser>(),
             messages = HashMap<String, Message>(),
             picture = parcel.readString()) {
-        parcel.readMap(users, String::class.java.classLoader)
+        parcel.readMap(users, ChatUser::class.java.classLoader)
         parcel.readMap(messages, Message::class.java.classLoader)
     }
 
-    var userList = emptyList<String>()
+    var userList = emptyList<ChatUser>()
         get() = users.values.toList()
 
     var messageList = emptyList<Message>()

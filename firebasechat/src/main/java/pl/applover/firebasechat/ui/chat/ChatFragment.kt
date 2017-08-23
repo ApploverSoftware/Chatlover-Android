@@ -49,7 +49,8 @@ class ChatFragment : Fragment() {
                             key,
                             currentUserId,
                             System.currentTimeMillis(),
-                            input.text.toString())).addOnCompleteListener {
+                            input.text.toString(),
+                            Message.Type.txt)).addOnCompleteListener {
                         input.setText("")
                         recyclerView.layoutManager.scrollToPosition(recyclerView.adapter.itemCount - 1)
                     }
