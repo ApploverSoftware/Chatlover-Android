@@ -14,6 +14,7 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.item_channel_list.view.*
 import pl.applover.firebasechat.R
 import pl.applover.firebasechat.model.Channel
+import pl.applover.firebasechat.model.ChatUser
 import pl.applover.firebasechat.ui.HeaderedFirebaseAdapter
 import pl.applover.firebasechat.ui.channel_list.ChannelAdapter.ChannelHolder
 import pl.applover.firebasechat.ui.channel_list.ChannelAdapter.ChannelHolder.OnChannelClickListener
@@ -23,7 +24,7 @@ import pl.applover.firebasechat.ui.channel_list.ChannelAdapter.ChannelHolder.OnC
  */
 class ChannelAdapter(val listener: OnChannelClickListener)
     : HeaderedFirebaseAdapter<ChannelHolder, ChannelHolder, Channel>(
-        FirebaseDatabase.getInstance().reference.child("channels"),
+        FirebaseDatabase.getInstance().reference.child("channel_by_user").child(ChatUser.current!!.uid),
         Channel::class.java, ChannelHolder::class.java, ChannelHolder::class.java,
         R.layout.item_channel_list, R.layout.item_channel_list, createDayHeaderDecider()) {
 
