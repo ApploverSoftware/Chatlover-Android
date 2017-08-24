@@ -22,14 +22,28 @@
         android:layout_alignParentRight="true"
         android:background="@color/chat_bottom_bar_background">
 
+        <ImageView
+            android:id="@+id/chat_location_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/chat_input_field"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/chat_input_field"
+            android:layout_centerVertical="true"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:clickable="true"
+            android:foreground="?selectableItemBackground"
+            android:src="@drawable/ic_location"/>
+
         <EditText
             android:id="@+id/chat_input_field"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_margin="8dp"
+            android:padding="8dp"
             android:layout_toLeftOf="@+id/chat_send_btn"
+            android:layout_toRightOf="@id/chat_location_btn"
             android:background="@color/chat_input_background"
             android:hint="Type Something..."
             android:maxLines="4" />
@@ -46,7 +60,7 @@
             android:paddingRight="8dp"
             android:clickable="true"
             android:foreground="?selectableItemBackground"
-            android:src="@drawable/ic_send_black_24dp" />
+            android:src="@drawable/ic_send" />
 
     </RelativeLayout>
 

@@ -24,7 +24,7 @@ class FirebaseChatMessagingService : FirebaseMessagingService() {
                 intent, PendingIntent.FLAG_ONE_SHOT)
 
         val notificationBuilder = NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_send_black_24dp)
+                .setSmallIcon(R.drawable.ic_location)
                 .setContentTitle(remoteMessage!!.notification.title)
                 .setContentText(remoteMessage.notification.body)
                 .setAutoCancel(true)
