@@ -30,6 +30,8 @@ class FirebaseChatMessagingService : FirebaseMessagingService() {
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
 
+        println(remoteMessage.data)
+
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         notificationManager.notify(1410, notificationBuilder.build())

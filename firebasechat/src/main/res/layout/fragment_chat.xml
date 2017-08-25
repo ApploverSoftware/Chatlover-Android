@@ -22,7 +22,7 @@
         android:layout_alignParentRight="true"
         android:background="@color/chat_bottom_bar_background">
 
-        <ImageView
+        <pl.applover.firebasechat.ui.LocationButton
             android:id="@+id/chat_location_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
