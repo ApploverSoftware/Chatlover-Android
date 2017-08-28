@@ -13,55 +13,64 @@
         android:layout_alignParentTop="true"
         android:background="@color/chat_recycler_view_background" />
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/chat_bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:background="@color/chat_bottom_bar_background">
+        android:background="@color/chat_bottom_bar_border"
+        android:paddingTop="1dp">
 
-        <pl.applover.firebasechat.ui.LocationButton
-            android:id="@+id/chat_location_btn"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/chat_input_field"
-            android:layout_alignParentLeft="true"
-            android:layout_alignTop="@+id/chat_input_field"
-            android:layout_centerVertical="true"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:clickable="true"
-            android:foreground="?selectableItemBackground"
-            android:src="@drawable/ic_location"/>
+            android:background="@color/chat_bottom_bar_background">
 
-        <EditText
-            android:id="@+id/chat_input_field"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:padding="8dp"
-            android:layout_toLeftOf="@+id/chat_send_btn"
-            android:layout_toRightOf="@id/chat_location_btn"
-            android:background="@color/chat_input_background"
-            android:hint="Type Something..."
-            android:maxLines="4" />
+            <pl.applover.firebasechat.ui.LocationButton
+                android:id="@+id/chat_location_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/chat_input_field"
+                android:layout_alignParentLeft="true"
+                android:layout_alignTop="@+id/chat_input_field"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:foreground="?selectableItemBackground"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:src="@drawable/ic_location" />
 
-        <ImageView
-            android:id="@+id/chat_send_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/chat_input_field"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/chat_input_field"
-            android:layout_centerVertical="true"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:clickable="true"
-            android:foreground="?selectableItemBackground"
-            android:src="@drawable/ic_send" />
+            <EditText
+                android:layout_marginTop="8dp"
+                android:id="@+id/chat_input_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/chat_send_btn"
+                android:layout_toRightOf="@id/chat_location_btn"
+                android:background="@drawable/chat_input_background"
+                android:hint="Type Something..."
+                android:maxLines="4"
+                android:padding="8dp" />
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/chat_send_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/chat_input_field"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/chat_input_field"
+                android:layout_centerVertical="true"
+                android:clickable="true"
+                android:foreground="?selectableItemBackground"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:src="@drawable/ic_send" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
 
 </RelativeLayout>
