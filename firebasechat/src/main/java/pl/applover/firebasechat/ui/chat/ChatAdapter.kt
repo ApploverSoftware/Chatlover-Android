@@ -35,8 +35,9 @@ class ChatAdapter(val channel: Channel,
     override fun populateItem(holder: MessageHolder, previous: Message?, model: Message, next: Message?, position: Int) {
         holder.bind(model, channel, position, currentUserId == model.sender)
     }
+
     override fun populateHeader(holder: DayHeaderHolder, previous: Message?, next: Message?, position: Int) {
-        holder.bind(createDayHeaderDecider().getHeader(previous,next)?:"New messages")
+        holder.bind(createDayHeaderDecider().getHeader(previous, next) ?: "New messages")
     }
 
     fun withAutoscroll() = this.also {
@@ -57,8 +58,8 @@ class ChatAdapter(val channel: Channel,
     companion object {
         fun createDayHeaderDecider() = object : HeaderDecider<Message> {
             override fun getHeader(previous: Message?, next: Message?): String? {
-                val p = previous?.calendar!!
-                val n = next?.calendar!!
+                val p = previous?.provideCalendar()!!
+                val n = next?.provideCalendar()!!
                 val sameYear = p.get(Calendar.YEAR) == n.get(Calendar.YEAR)
                 if (n.get(Calendar.DAY_OF_YEAR) == p.get(Calendar.DAY_OF_YEAR)) return null
                 else return SimpleDateFormat("EEE, d MMM ${if (sameYear) "" else "''yy"}",
@@ -78,9 +79,10 @@ class ChatAdapter(val channel: Channel,
             body?.text = message.body
 
             var label = "${SimpleDateFormat("EEE HH:mm", Locale.getDefault()).format(message.time)}"
-            channel.users[message.sender]?.let {
-                label+=", ${it.name}"
-            }
+            if (!isOwnMsg)
+                channel.users[message.sender]?.let {
+                    label += ", ${it.name}"
+                }
             time?.text = label
             setType(isOwnMsg)
         }

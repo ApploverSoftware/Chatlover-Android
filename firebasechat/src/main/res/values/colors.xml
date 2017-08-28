@@ -5,9 +5,11 @@
 
     <color name="chat_bottom_bar_background">#fff</color>
     <color name="chat_input_background">#fff</color>
-    <color name="chat_recycler_view_background">#ffe</color>
+    <color name="chat_recycler_view_background">#fff</color>
 
     <color name="chat_item_bubble_own">#ff8462</color>
     <color name="chat_item_bubble_other">#6dff7d</color>
-    <color name="chat_day_header_color">#666</color>
+    <color name="chat_day_header_color">#888</color>
+    <color name="chat_item_label">#aaa</color>
+    <color name="chat_item_text">#000</color>
 </resources>

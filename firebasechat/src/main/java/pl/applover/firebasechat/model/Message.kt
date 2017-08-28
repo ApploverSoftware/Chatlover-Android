@@ -33,9 +33,7 @@ data class Message(val id: String, val sender: String, val time: Long, val body:
         override fun newArray(s: Int): Array<Message?> = arrayOfNulls(s)
     }
 
-    val calendar: Calendar by lazy {
-        Calendar.getInstance().also { it.timeInMillis = time }
-    }
+    fun provideCalendar() = Calendar.getInstance().also { it.timeInMillis = time }
 
     enum class Type {txt, img, vid, loc, mic}
 }
