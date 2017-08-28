@@ -65,7 +65,7 @@ class ChannelAdapter(val listener: OnChannelClickListener)
                 Glide.with(icon?.context)
                         .using(FirebaseImageLoader())
                         .load(storage.child(channel.id).child(channel.picture))
-                        .placeholder(R.drawable.avatar_placeholder)
+                        .placeholder(R.drawable.channel_placeholder)
                         .bitmapTransform(CircleTransformation(icon!!.context))
                         .into(icon)
             }

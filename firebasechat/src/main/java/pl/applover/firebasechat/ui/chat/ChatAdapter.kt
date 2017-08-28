@@ -109,7 +109,7 @@ class ChatAdapter(val channel: Channel,
                     Glide.with(avatar?.context)
                             .using(FirebaseImageLoader())
                             .load(storage.child(user.uid).child(user.avatar))
-                            .placeholder(R.drawable.avatar_placeholder)
+                            .placeholder(R.drawable.user_placeholder)
                             .bitmapTransform(CircleTransformation(avatar!!.context))
                             .into(avatar)
                 }

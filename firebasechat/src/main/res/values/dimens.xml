@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="channel_list_image_size">64dp</dimen>
-    <dimen name="item_message_avatar_size">32dp</dimen>
+    <dimen name="item_message_avatar_size">42dp</dimen>
 </resources>
