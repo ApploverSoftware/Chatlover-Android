@@ -14,6 +14,7 @@ object ChatViewConfig {
 
     var textSize: Float? = null
     var textColour: Int? = null
+    var textColourSecondary: Int? = null
 
     var labelColour: Int? = null
     var labelSize: Float? = null

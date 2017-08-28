@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge>
-    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/item_message_body"
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout
+        android:id="@+id/item_message_block_txt"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:textColor="@color/chat_item_text"
-        android:textSize="@dimen/item_message_text_size"
-        tools:text="TEST MSG" />
+        android:layout_height="wrap_content">
+
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/item_message_body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textColor="@color/chat_item_text"
+            android:textSize="@dimen/item_message_text_size"
+            tools:text="TEST MSG" />
+    </FrameLayout>
 </merge>

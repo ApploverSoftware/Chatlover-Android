@@ -37,15 +37,15 @@
                 tools:text="czw 16:30, Piotrek" />
 
             <FrameLayout
+                android:foreground="?selectableItemBackground"
+                android:clickable="true"
                 android:id="@+id/item_message_bubble"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/chat_bubble">
                 <include
-                    android:id="@+id/item_message_block_txt"
                     layout="@layout/item_message_txt"/>
                 <include
-                    android:id="@+id/item_message_block_loc"
                     layout="@layout/item_message_loc"/>
             </FrameLayout>
         </LinearLayout>

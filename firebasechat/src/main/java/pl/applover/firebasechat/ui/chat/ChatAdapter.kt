@@ -15,8 +15,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.item_day_header.view.*
 import kotlinx.android.synthetic.main.item_message.view.*
-import kotlinx.android.synthetic.main.item_message_txt.view.*
 import kotlinx.android.synthetic.main.item_message_loc.view.*
+import kotlinx.android.synthetic.main.item_message_txt.view.*
 import pl.applover.firebasechat.R
 import pl.applover.firebasechat.config.ChatViewConfig
 import pl.applover.firebasechat.model.Channel
@@ -114,22 +114,25 @@ class ChatAdapter(val channel: Channel,
         }
 
         private fun setType(message: Message, user: ChatUser?) {
+            //TODO: Add onclick handlers for copying and displaying maps and such.
             listOf(txtBlock, locBlock).forEach { it?.visibility = View.GONE }
-            when(message.type){
+            when (message.type) {
                 txt -> {
                     txtBlock?.visibility = View.VISIBLE
                     textBody?.text = message.body
                 }
                 loc -> {
                     locBlock?.visibility = View.VISIBLE
-                    locTitle?.text = "${user?.name} sent you their location"
+                    locTitle?.text =
+                            if (ChatUser.current!!.uid == message.sender) "You sent your location"
+                            else "${user?.name} sent their location"
                     message.body.toAddressAsync(locAddress!!.context) {
                         locAddress.text = it
                     }
                 }
-                img -> TODO()
-                vid -> TODO()
-                mic -> TODO()
+                img -> TODO("Not yet supported")
+                vid -> TODO("Not yet supported")
+                mic -> TODO("Not yet supported")
             }
         }
 
@@ -148,6 +151,16 @@ class ChatAdapter(val channel: Channel,
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.textSize
                         ?: context.resources.getDimension(R.dimen.item_message_text_size))
                 setTextColor(ChatViewConfig.textColour ?: context.resources.getColor(R.color.chat_item_text))
+            }
+            with(locTitle!!) {
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.textSize
+                        ?: context.resources.getDimension(R.dimen.item_message_text_size))
+                setTextColor(ChatViewConfig.textColour ?: context.resources.getColor(R.color.chat_item_text))
+            }
+            with(locAddress!!) {
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.textSize
+                        ?: context.resources.getDimension(R.dimen.item_message_label_text_size))
+                setTextColor(ChatViewConfig.textColourSecondary ?: context.resources.getColor(R.color.chat_item_text_secondary))
             }
             with(bubble!!) {
                 background = ChatViewConfig.bubbleShape ?: ContextCompat.getDrawable(context, (R.drawable.chat_bubble))
