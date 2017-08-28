@@ -12,7 +12,6 @@ object ChatViewConfig {
     var bubbleColourOwn: Int? = null
     var bubbleColourOther: Int? = null
 
-    var textPadding: Int? = null
     var textSize: Float? = null
     var textColour: Int? = null
 

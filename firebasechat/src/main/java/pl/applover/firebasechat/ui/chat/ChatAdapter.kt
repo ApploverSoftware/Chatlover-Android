@@ -1,8 +1,10 @@
 package pl.applover.firebasechat.ui.chat
 
 import android.graphics.PorterDuff
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -113,21 +115,18 @@ class ChatAdapter(val channel: Channel,
             }
             with(time!!) {
                 setTextColor(ChatViewConfig.labelColour ?: context.resources.getColor(R.color.chat_item_label))
-                textSize = ChatViewConfig.labelSize
-                        ?: context.resources.getDimension(R.dimen.item_message_label_text_size)
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.labelSize
+                        ?: context.resources.getDimension(R.dimen.item_message_label_text_size))
                 if (!(ChatViewConfig.labelIsShown
                         ?: true)) visibility = View.GONE
             }
             with(body!!) {
-                textSize = ChatViewConfig.textSize
-                        ?: context.resources.getDimension(R.dimen.item_message_text_size)
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.textSize
+                        ?: context.resources.getDimension(R.dimen.item_message_text_size))
                 setTextColor(ChatViewConfig.textColour ?: context.resources.getColor(R.color.chat_item_text))
-                val m = ChatViewConfig.textPadding
-                        ?: R.dimen.item_message_text_padding
-                (layoutParams as FrameLayout.LayoutParams).setMargins(m, m, m, m)
             }
             with(bubble!!) {
-                background = ChatViewConfig.bubbleShape ?: context.resources.getDrawable(R.drawable.chat_bubble)
+                background = ChatViewConfig.bubbleShape ?: ContextCompat.getDrawable(context, (R.drawable.chat_bubble))
             }
         }
 
@@ -163,8 +162,8 @@ class ChatAdapter(val channel: Channel,
             if (!(ChatViewConfig.headerIsShown ?: true))
                 itemView.visibility = View.GONE
             label?.text = text
-            label?.textSize = ChatViewConfig.headerSize
-                    ?: label!!.context.resources.getDimension(R.dimen.header_text_size)
+            label?.setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.headerSize
+                    ?: label.context.resources.getDimension(R.dimen.header_text_size))
             label?.setTextColor(ChatViewConfig.headerColour
                     ?: label.context.resources.getColor(R.color.chat_day_header_color))
         }

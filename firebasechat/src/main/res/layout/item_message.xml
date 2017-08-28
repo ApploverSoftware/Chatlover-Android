@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/chat_item_label"
-                android:textSize="12sp"
+                android:textSize="@dimen/item_message_label_text_size"
                 tools:text="czw 16:30, Piotrek" />
 
             <FrameLayout
@@ -47,6 +47,7 @@
                     android:id="@+id/item_message_body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="@dimen/item_message_text_size"
                     android:layout_margin="8dp"
                     android:textColor="@color/chat_item_text"
                     tools:text="TEST MSG" />
