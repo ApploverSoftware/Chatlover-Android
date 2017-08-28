@@ -42,5 +42,5 @@ object ChatViewConfig {
 //    var iconVoice: Drawable? = null
 //    var iconMessageType: Drawable? = null
 
-    var messageTypes: List<Message.Type>? = null
+//    var messageTypes: List<Message.Type>? = null
 }

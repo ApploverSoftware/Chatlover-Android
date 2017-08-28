@@ -46,12 +46,13 @@
                 android:layout_marginTop="8dp"
                 android:id="@+id/chat_input_field"
                 android:layout_width="wrap_content"
+                android:textColor="@color/chat_input_text"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/chat_send_btn"
                 android:layout_toRightOf="@id/chat_location_btn"
                 android:background="@drawable/chat_input_background"
-                android:hint="Type Something..."
+                android:hint="@string/chat_input_hint"
                 android:maxLines="4"
                 android:padding="8dp" />
 

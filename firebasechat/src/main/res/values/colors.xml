@@ -13,4 +13,5 @@
     <color name="chat_item_label">#aaa</color>
     <color name="chat_item_text">#000</color>
     <color name="chat_bottom_bar_border">#bbb</color>
+    <color name="chat_input_text">#000</color>
 </resources>

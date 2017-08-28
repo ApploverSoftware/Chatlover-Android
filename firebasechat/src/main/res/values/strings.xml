@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FirebaseChat</string>
+    <string name="chat_input_hint">Type something...</string>
 </resources>

@@ -5,8 +5,10 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +19,7 @@ import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_chat.*
 import pl.applover.firebasechat.R
+import pl.applover.firebasechat.config.ChatViewConfig
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.Message
 import pl.applover.firebasechat.ui.LocationButton
@@ -69,6 +72,7 @@ class ChatFragment : Fragment() {
                 }
             } ?: Toast.makeText(context, "No location", Toast.LENGTH_SHORT).show()
         }
+        designWithConfig()
     }
 
     fun onSend() {
@@ -85,6 +89,20 @@ class ChatFragment : Fragment() {
                     recyclerView.layoutManager.scrollToPosition(recyclerView.adapter.itemCount - 1)
                 }
             }
+        }
+    }
+
+    fun designWithConfig(){
+        send.setImageDrawable(ChatViewConfig.iconSend?:ContextCompat.getDrawable(context, R.drawable.ic_send))
+        sendLocation.setImageDrawable(ChatViewConfig.iconLocation?:ContextCompat.getDrawable(context, R.drawable.ic_location))
+
+        with(input) {
+            background = ChatViewConfig.inputBackground?:ContextCompat.getDrawable(context, R.drawable.chat_input_background)
+            hint = ChatViewConfig.inputHint ?: context.getString(R.string.chat_input_hint)
+            maxLines = ChatViewConfig.inputMaxLines ?: 4
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.inputTextSize
+                    ?: context.resources.getDimension(R.dimen.input_text_size))
+            setTextColor(ChatViewConfig.inputTextColour?:context.resources.getColor(R.color.chat_input_text))
         }
     }
 
