@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.item_channel_list.view.*
 import pl.applover.firebasechat.R
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.ChatUser
+import pl.applover.firebasechat.ui.CircleTransformation
 import pl.applover.firebasechat.ui.HeaderedFirebaseAdapter
 import pl.applover.firebasechat.ui.channel_list.ChannelAdapter.ChannelHolder
 import pl.applover.firebasechat.ui.channel_list.ChannelAdapter.ChannelHolder.OnChannelClickListener
@@ -32,7 +33,7 @@ class ChannelAdapter(val listener: OnChannelClickListener)
         holder.bind(model,
                 position,
                 FirebaseStorage.getInstance().reference
-                        .child("FirebaseChat").child("channel_pictures"),
+                        .child("chatlover").child("channel"),
                 listener)
     }
 
@@ -40,7 +41,7 @@ class ChannelAdapter(val listener: OnChannelClickListener)
 
     companion object {
         fun createDayHeaderDecider() = object : HeaderDecider<Channel> {
-            override fun getHeader(previous: Channel?, next: Channel?)= null
+            override fun getHeader(previous: Channel?, next: Channel?) = null
         }
     }
 
@@ -63,7 +64,9 @@ class ChannelAdapter(val listener: OnChannelClickListener)
             channel.picture?.let {
                 Glide.with(icon?.context)
                         .using(FirebaseImageLoader())
-                        .load(storage.child(channel.picture))
+                        .load(storage.child(channel.id).child(channel.picture))
+                        .placeholder(R.drawable.avatar_placeholder)
+                        .bitmapTransform(CircleTransformation(icon!!.context))
                         .into(icon)
             }
             cell?.setOnClickListener { listener.onClick(channel) }

@@ -6,12 +6,17 @@ import android.support.v7.widget.RecyclerView
 import android.view.Gravity
 import android.view.View
 import com.bumptech.glide.Glide
+import com.firebase.ui.storage.images.FirebaseImageLoader
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.item_day_header.view.*
 import kotlinx.android.synthetic.main.item_message.view.*
 import pl.applover.firebasechat.R
 import pl.applover.firebasechat.model.Channel
+import pl.applover.firebasechat.model.ChatUser
 import pl.applover.firebasechat.model.Message
+import pl.applover.firebasechat.ui.CircleTransformation
 import pl.applover.firebasechat.ui.HeaderedFirebaseAdapter
 import pl.applover.firebasechat.ui.chat.ChatAdapter.DayHeaderHolder
 import pl.applover.firebasechat.ui.chat.ChatAdapter.MessageHolder
@@ -33,7 +38,13 @@ class ChatAdapter(val channel: Channel,
 ) {
 
     override fun populateItem(holder: MessageHolder, previous: Message?, model: Message, next: Message?, position: Int) {
-        holder.bind(model, channel, position, currentUserId == model.sender)
+        holder.bind(
+                model,
+                channel,
+                position,
+                currentUserId == model.sender,
+                FirebaseStorage.getInstance().reference.child("chatlover")
+                        .child("chat_user"))
     }
 
     override fun populateHeader(holder: DayHeaderHolder, previous: Message?, next: Message?, position: Int) {
@@ -75,28 +86,33 @@ class ChatAdapter(val channel: Channel,
         val avatar = itemView?.item_message_avatar
         val time = itemView?.item_message_time
 
-        fun bind(message: Message, channel: Channel, position: Int, isOwnMsg: Boolean) {
+        fun bind(message: Message, channel: Channel, position: Int, isOwnMsg: Boolean, storage: StorageReference) {
             body?.text = message.body
 
-            var label = "${SimpleDateFormat("EEE HH:mm", Locale.getDefault()).format(message.time)}"
+            var label = SimpleDateFormat("EEE HH:mm", Locale.getDefault()).format(message.time)
             if (!isOwnMsg)
                 channel.users[message.sender]?.let {
                     label += ", ${it.name}"
                 }
             time?.text = label
-            setType(isOwnMsg)
+            setType(channel.users[message.sender], isOwnMsg, storage)
         }
 
-        private fun setType(isOwnMsg: Boolean) {
+        private fun setType(user: ChatUser?, isOwnMsg: Boolean, storage: StorageReference) {
             if (isOwnMsg) {
                 avatar?.visibility = View.GONE
                 lr?.gravity = Gravity.END
                 bubble?.background?.setColorFilter(bubble.resources.getColor(R.color.chat_item_bubble_own), PorterDuff.Mode.SRC_IN)
             } else {
                 avatar?.visibility = View.VISIBLE
-                Glide.with(avatar?.context)
-                        .load(R.drawable.avatar_placeholder)
-                        .into(avatar)
+                user?.avatar?.let {
+                    Glide.with(avatar?.context)
+                            .using(FirebaseImageLoader())
+                            .load(storage.child(user.uid).child(user.avatar))
+                            .placeholder(R.drawable.avatar_placeholder)
+                            .bitmapTransform(CircleTransformation(avatar!!.context))
+                            .into(avatar)
+                }
                 lr?.gravity = Gravity.START
                 bubble?.background?.setColorFilter(bubble.resources.getColor(R.color.chat_item_bubble_other), PorterDuff.Mode.SRC_IN)
             }
