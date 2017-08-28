@@ -8,7 +8,6 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import com.bumptech.glide.Glide
 import com.firebase.ui.storage.images.FirebaseImageLoader
 import com.google.firebase.database.FirebaseDatabase
@@ -16,11 +15,15 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.item_day_header.view.*
 import kotlinx.android.synthetic.main.item_message.view.*
+import kotlinx.android.synthetic.main.item_message_txt.view.*
+import kotlinx.android.synthetic.main.item_message_loc.view.*
 import pl.applover.firebasechat.R
 import pl.applover.firebasechat.config.ChatViewConfig
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.ChatUser
 import pl.applover.firebasechat.model.Message
+import pl.applover.firebasechat.model.Message.Type.*
+import pl.applover.firebasechat.toAddressAsync
 import pl.applover.firebasechat.ui.CircleTransformation
 import pl.applover.firebasechat.ui.HeaderedFirebaseAdapter
 import pl.applover.firebasechat.ui.chat.ChatAdapter.DayHeaderHolder
@@ -86,7 +89,11 @@ class ChatAdapter(val channel: Channel,
     }
 
     class MessageHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
-        val body = itemView?.item_message_body
+        val textBody = itemView?.item_message_body
+        val txtBlock = itemView?.item_message_block_txt
+        val locBlock = itemView?.item_message_block_loc
+        val locTitle = itemView?.item_message_loc_title
+        val locAddress = itemView?.item_message_loc_address
         val bubble = itemView?.item_message_bubble
         val lr = itemView?.item_message_lr
         val avatar = itemView?.item_message_avatar
@@ -94,8 +101,6 @@ class ChatAdapter(val channel: Channel,
         val placeholder = ChatViewConfig.avatarPlaceholder ?: itemView!!.context?.getDrawable(R.drawable.user_placeholder)
 
         fun bind(message: Message, channel: Channel, position: Int, isOwnMsg: Boolean, storage: StorageReference) {
-            body?.text = message.body
-
             var label = SimpleDateFormat(ChatViewConfig.labelTimeFormat
                     ?: "EEE HH:mm", Locale.getDefault()).format(message.time)
             if (!isOwnMsg)
@@ -103,10 +108,29 @@ class ChatAdapter(val channel: Channel,
                     label += ", ${it.name}"
                 }
             time?.text = label
-
             designWithConfig()
+            setDirection(channel.users[message.sender], isOwnMsg, storage)
+            setType(message, channel.users[message.sender])
+        }
 
-            setType(channel.users[message.sender], isOwnMsg, storage)
+        private fun setType(message: Message, user: ChatUser?) {
+            listOf(txtBlock, locBlock).forEach { it?.visibility = View.GONE }
+            when(message.type){
+                txt -> {
+                    txtBlock?.visibility = View.VISIBLE
+                    textBody?.text = message.body
+                }
+                loc -> {
+                    locBlock?.visibility = View.VISIBLE
+                    locTitle?.text = "${user?.name} sent you their location"
+                    message.body.toAddressAsync(locAddress!!.context) {
+                        locAddress.text = it
+                    }
+                }
+                img -> TODO()
+                vid -> TODO()
+                mic -> TODO()
+            }
         }
 
         fun designWithConfig() {
@@ -120,7 +144,7 @@ class ChatAdapter(val channel: Channel,
                 if (!(ChatViewConfig.labelIsShown
                         ?: true)) visibility = View.GONE
             }
-            with(body!!) {
+            with(textBody!!) {
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.textSize
                         ?: context.resources.getDimension(R.dimen.item_message_text_size))
                 setTextColor(ChatViewConfig.textColour ?: context.resources.getColor(R.color.chat_item_text))
@@ -130,7 +154,7 @@ class ChatAdapter(val channel: Channel,
             }
         }
 
-        private fun setType(user: ChatUser?, isOwnMsg: Boolean, storage: StorageReference) {
+        private fun setDirection(user: ChatUser?, isOwnMsg: Boolean, storage: StorageReference) {
             if (isOwnMsg) {
                 avatar?.visibility = View.GONE
                 lr?.gravity = Gravity.END

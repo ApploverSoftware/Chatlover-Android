@@ -6,10 +6,9 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp"
-    >
-
-    <LinearLayout
+    android:layout_marginBottom="4dp">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -42,18 +41,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/chat_bubble">
-
-                <TextView
-                    android:id="@+id/item_message_body"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/item_message_text_size"
-                    android:layout_margin="8dp"
-                    android:textColor="@color/chat_item_text"
-                    tools:text="TEST MSG" />
-
+                <include
+                    android:id="@+id/item_message_block_txt"
+                    layout="@layout/item_message_txt"/>
+                <include
+                    android:id="@+id/item_message_block_loc"
+                    layout="@layout/item_message_loc"/>
             </FrameLayout>
         </LinearLayout>
-
     </LinearLayout>
 </FrameLayout>
