@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.fragment_channel_list.*
 import pl.applover.firebasechat.R
+import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.ui.channel_list.ChannelAdapter.ChannelHolder.OnChannelClickListener
 
 /**
@@ -33,8 +34,8 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
         recyclerView.adapter = ChannelAdapter(this)
     }
 
-    override fun onClick(channelId: String) {
-        listener?.onChatRequested(channelId)
+    override fun onClick(channel: Channel) {
+        listener?.onChatRequested(channel)
     }
 
     fun withListener(listener: ChannelListListener) = this.also { this.listener = listener }
@@ -44,7 +45,7 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
     }
 
     interface ChannelListListener {
-        fun onChatRequested(channelId: String)
+        fun onChatRequested(channel: Channel)
     }
 
     override fun onDestroyView() {

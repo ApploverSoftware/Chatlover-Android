@@ -3,15 +3,14 @@ package pl.applover.firebasechat.ui.chat
 import android.graphics.PorterDuff
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.text.format.DateUtils
 import android.view.Gravity
 import android.view.View
-import android.widget.CalendarView
-import android.widget.FrameLayout
+import com.bumptech.glide.Glide
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.item_day_header.view.*
 import kotlinx.android.synthetic.main.item_message.view.*
 import pl.applover.firebasechat.R
+import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.Message
 import pl.applover.firebasechat.ui.HeaderedFirebaseAdapter
 import pl.applover.firebasechat.ui.chat.ChatAdapter.DayHeaderHolder
@@ -22,18 +21,19 @@ import java.util.*
 /**
  * Created by sp0rk on 18/08/17.
  */
-class ChatAdapter(channelId: String,
+class ChatAdapter(val channel: Channel,
                   val currentUserId: String,
                   val layoutManager: LinearLayoutManager,
                   val recyclerView: RecyclerView)
     : HeaderedFirebaseAdapter<MessageHolder, DayHeaderHolder, Message>(
-        FirebaseDatabase.getInstance().reference.child("channels").child(channelId).child("messages"),
+        FirebaseDatabase.getInstance().reference.child("channels").child(channel.id).child("messages"),
         Message::class.java, MessageHolder::class.java, DayHeaderHolder::class.java,
         R.layout.item_message, R.layout.item_day_header,
         createDayHeaderDecider()
 ) {
+
     override fun populateItem(holder: MessageHolder, previous: Message?, model: Message, next: Message?, position: Int) {
-        holder.bind(model, position, currentUserId == model.sender)
+        holder.bind(model, channel, position, currentUserId == model.sender)
     }
     override fun populateHeader(holder: DayHeaderHolder, previous: Message?, next: Message?, position: Int) {
         holder.bind(createDayHeaderDecider().getHeader(previous,next)?:"New messages")
@@ -70,24 +70,35 @@ class ChatAdapter(channelId: String,
     class MessageHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         val body = itemView?.item_message_body
         val bubble = itemView?.item_message_bubble
+        val lr = itemView?.item_message_lr
+        val avatar = itemView?.item_message_avatar
+        val time = itemView?.item_message_time
 
-        fun bind(message: Message, position: Int, isOwnMsg: Boolean) {
+        fun bind(message: Message, channel: Channel, position: Int, isOwnMsg: Boolean) {
             body?.text = message.body
+
+            var label = "${SimpleDateFormat("EEE HH:mm", Locale.getDefault()).format(message.time)}"
+            channel.users[message.sender]?.let {
+                label+=", ${it.name}"
+            }
+            time?.text = label
             setType(isOwnMsg)
         }
 
         private fun setType(isOwnMsg: Boolean) {
-            with(bubble!!) {
-                val p = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
-                if (isOwnMsg) {
-                    p.gravity = Gravity.END
-                    background.setColorFilter(resources.getColor(R.color.chat_item_bubble_own), PorterDuff.Mode.SRC_IN)
-                } else {
-                    p.gravity = Gravity.START
-                    background.setColorFilter(resources.getColor(R.color.chat_item_bubble_other), PorterDuff.Mode.SRC_IN)
-                }
-                layoutParams = p
+            if (isOwnMsg) {
+                avatar?.visibility = View.GONE
+                lr?.gravity = Gravity.END
+                bubble?.background?.setColorFilter(bubble.resources.getColor(R.color.chat_item_bubble_own), PorterDuff.Mode.SRC_IN)
+            } else {
+                avatar?.visibility = View.VISIBLE
+                Glide.with(avatar?.context)
+                        .load(R.drawable.avatar_placeholder)
+                        .into(avatar)
+                lr?.gravity = Gravity.START
+                bubble?.background?.setColorFilter(bubble.resources.getColor(R.color.chat_item_bubble_other), PorterDuff.Mode.SRC_IN)
             }
+
         }
     }
 

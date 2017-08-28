@@ -8,6 +8,7 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ResultCodes
 import com.google.firebase.auth.FirebaseAuth
 import pl.applover.firebasechat.config.NotificationsConfig
+import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.ChatUser
 import pl.applover.firebasechat.ui.channel_list.ChannelListFragment
 import pl.applover.firebasechat.ui.channel_list.ChannelListFragment.ChannelListListener
@@ -16,10 +17,10 @@ import pl.applover.firebasechat.ui.chat.ChatFragment.ChatListener
 
 
 class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
-    override fun onChatRequested(channelId: String) {
+    override fun onChatRequested(channel: Channel) {
         supportFragmentManager
                 .beginTransaction()
-                .add(R.id.container, ChatFragment.newInstance(channelId, ChatUser.current?.uid ?: "").withListener(this))
+                .add(R.id.container, ChatFragment.newInstance(channel, ChatUser.current?.uid ?: "").withListener(this))
                 .addToBackStack("asdads")
                 .commit()
     }

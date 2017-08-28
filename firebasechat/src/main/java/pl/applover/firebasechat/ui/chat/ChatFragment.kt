@@ -1,19 +1,10 @@
 package pl.applover.firebasechat.ui.chat
 
-import android.Manifest
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
 import android.content.Context
-import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -26,6 +17,7 @@ import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_chat.*
 import pl.applover.firebasechat.R
+import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.Message
 import pl.applover.firebasechat.ui.LocationButton
 
@@ -38,7 +30,7 @@ class ChatFragment : Fragment() {
     val input: EditText by lazy { chat_input_field }
     val send: ImageView by lazy { chat_send_btn }
     val sendLocation: LocationButton by lazy { chat_location_btn }
-    val channelId by lazy { arguments.getString("channelId") }
+    val channel by lazy { arguments.getParcelable<Channel>("channel") }
     val currentUserId by lazy { arguments.getString("currentUserId") }
     lateinit var manager: LocationManager
 
@@ -59,13 +51,13 @@ class ChatFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val llm = LinearLayoutManager(context).apply { stackFromEnd = true }
         recyclerView.layoutManager = llm
-        recyclerView.adapter = ChatAdapter(channelId, currentUserId, llm, recyclerView).withAutoscroll()
+        recyclerView.adapter = ChatAdapter(channel, currentUserId, llm, recyclerView).withAutoscroll()
 
         send.setOnClickListener { onSend() }
         sendLocation.setup(activity, manager, 3000){l: Location? ->
             l?.let {
                 val db = FirebaseDatabase.getInstance().reference
-                with(db.child("channels").child(channelId).child("messages").push()) {
+                with(db.child("channels").child(channel.id).child("messages").push()) {
                     ref.setValue(Message(
                             key,
                             currentUserId,
@@ -82,7 +74,7 @@ class ChatFragment : Fragment() {
     fun onSend() {
         if (input.text.isNotEmpty()) {
             val db = FirebaseDatabase.getInstance().reference
-            with(db.child("channels").child(channelId).child("messages").push()) {
+            with(db.child("channels").child(channel.id).child("messages").push()) {
                 ref.setValue(Message(
                         key,
                         currentUserId,
@@ -99,10 +91,10 @@ class ChatFragment : Fragment() {
     fun withListener(listener: ChatListener) = this.also { this.listener = listener }
 
     companion object {
-        fun newInstance(channelId: String, currentUserId: String): ChatFragment {
+        fun newInstance(channel: Channel, currentUserId: String): ChatFragment {
             val fragment = ChatFragment()
             with(Bundle()) {
-                putString("channelId", channelId)
+                putParcelable("channel", channel)
                 putString("currentUserId", currentUserId)
                 fragment.arguments = this
             }

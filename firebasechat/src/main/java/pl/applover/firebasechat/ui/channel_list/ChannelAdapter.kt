@@ -66,11 +66,11 @@ class ChannelAdapter(val listener: OnChannelClickListener)
                         .load(storage.child(channel.picture))
                         .into(icon)
             }
-            cell?.setOnClickListener { listener.onClick(channel.id) }
+            cell?.setOnClickListener { listener.onClick(channel) }
         }
 
         interface OnChannelClickListener {
-            fun onClick(channelId: String)
+            fun onClick(channel: Channel)
         }
     }
 }
