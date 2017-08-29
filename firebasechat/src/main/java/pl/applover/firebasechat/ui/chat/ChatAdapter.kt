@@ -131,9 +131,9 @@ class ChatAdapter(val channel: Channel,
                         openMap(get(0).toDouble(), get(1).toDouble())
                     }
                 }
-                img -> TODO()
-                vid -> TODO()
-                mic -> TODO()
+                img -> TODO("Not yet supported")
+                vid -> TODO("Not yet supported")
+                mic -> TODO("Not yet supported")
             }
         }
 
@@ -146,13 +146,13 @@ class ChatAdapter(val channel: Channel,
                 loc -> {
                     message.body.toAddressAsync(bubble!!.context, { copy(it, "address") })
                 }
-                img -> TODO()
-                vid -> TODO()
-                mic -> TODO()
+                img -> TODO("Not yet supported")
+                vid -> TODO("Not yet supported")
+                mic -> TODO("Not yet supported")
             }
         }
 
-        fun copy(s: String, tag: String){
+        fun copy(s: String, tag: String) {
             val cM = bubble!!.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             cM.primaryClip = ClipData.newPlainText("Copied $tag", s)
             Toast.makeText(bubble.context, "Copied $tag to your clipboard", Toast.LENGTH_SHORT).show()
@@ -163,7 +163,6 @@ class ChatAdapter(val channel: Channel,
         }
 
         private fun setType(message: Message, user: ChatUser?) {
-            //TODO: Add onclick handlers for copying and displaying maps and such.
             listOf(txtBlock, locBlock).forEach { it?.visibility = View.GONE }
             when (message.type) {
                 txt -> {
