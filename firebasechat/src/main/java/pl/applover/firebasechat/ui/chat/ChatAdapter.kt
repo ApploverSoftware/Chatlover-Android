@@ -1,6 +1,11 @@
 package pl.applover.firebasechat.ui.chat
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
 import android.graphics.PorterDuff
+import android.net.Uri
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -8,6 +13,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.firebase.ui.storage.images.FirebaseImageLoader
 import com.google.firebase.database.FirebaseDatabase
@@ -111,6 +117,49 @@ class ChatAdapter(val channel: Channel,
             designWithConfig()
             setDirection(channel.users[message.sender], isOwnMsg, storage)
             setType(message, channel.users[message.sender])
+            bubble?.setOnClickListener { onMsgClicked(message) }
+            bubble?.setOnLongClickListener { onMsgLongClicked(message) }
+        }
+
+        fun onMsgClicked(message: Message) {
+            when (message.type) {
+                txt -> {
+                    Toast.makeText(bubble?.context, "Hold the message to copy its contents", Toast.LENGTH_SHORT).show()
+                }
+                loc -> {
+                    with(message.body.split("/")) {
+                        openMap(get(0).toDouble(), get(1).toDouble())
+                    }
+                }
+                img -> TODO()
+                vid -> TODO()
+                mic -> TODO()
+            }
+        }
+
+        //true to indicate that event has been consumed
+        fun onMsgLongClicked(message: Message) = true.also {
+            when (message.type) {
+                txt -> {
+                    copy(message.body, "message")
+                }
+                loc -> {
+                    message.body.toAddressAsync(bubble!!.context, { copy(it, "address") })
+                }
+                img -> TODO()
+                vid -> TODO()
+                mic -> TODO()
+            }
+        }
+
+        fun copy(s: String, tag: String){
+            val cM = bubble!!.context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            cM.primaryClip = ClipData.newPlainText("Copied $tag", s)
+            Toast.makeText(bubble.context, "Copied $tag to your clipboard", Toast.LENGTH_SHORT).show()
+        }
+
+        fun openMap(lat: Double, lon: Double) {
+            bubble!!.context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("geo:$lat,$lon")))
         }
 
         private fun setType(message: Message, user: ChatUser?) {
