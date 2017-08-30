@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_channel_divider"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -30,7 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/item_channel_icon"
-            android:textSize="20sp"
+            android:textSize="@dimen/item_channel_name_size"
+            android:textColor="@color/item_channel_name"
             tools:text="Channel Name" />
 
         <TextView
@@ -44,7 +46,8 @@
             android:ellipsize="end"
             android:maxLines="2"
             tools:text="Bacon ipsum dolor amet spare ribs salami picanha beef pork loin tongue frankfurter beef ribs pork belly meatloaf. Drumstick rump short ribs, landjaeger andouille boudin chuck tail. Pancetta strip steak shankle prosciutto burgdoggen."
-            android:textSize="14sp" />
+            android:textSize="@dimen/item_channel_last_msg_size"
+            android:textColor="@color/item_channel_last_msg"/>
 
         <TextView
             android:id="@+id/item_channel_time"
@@ -54,7 +57,8 @@
             android:layout_alignParentTop="true"
             android:layout_margin="8dp"
             android:text="11.08, 10:56"
-            android:textSize="12sp" />
+            android:textSize="@dimen/item_channel_time_size"
+            android:textColor="@color/item_channel_time"/>
 
     </RelativeLayout>
 </FrameLayout>

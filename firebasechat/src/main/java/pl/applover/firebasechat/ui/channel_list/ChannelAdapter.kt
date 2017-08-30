@@ -1,8 +1,13 @@
 package pl.applover.firebasechat.ui.channel_list
 
+import android.graphics.drawable.ColorDrawable
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
+import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -13,6 +18,8 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.item_channel_list.view.*
 import pl.applover.firebasechat.R
+import pl.applover.firebasechat.config.ChannelListConfig
+import pl.applover.firebasechat.config.ChatViewConfig
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.ChatUser
 import pl.applover.firebasechat.ui.CircleTransformation
@@ -50,6 +57,7 @@ class ChannelAdapter(val listener: OnChannelClickListener)
         val lastMsg: TextView? = itemView?.item_channel_last_message
         val time: TextView? = itemView?.item_channel_time
         val cell: RelativeLayout? = itemView?.item_channel_cell
+        val divider: FrameLayout? = itemView?.item_channel_divider
         val icon: ImageView? = itemView?.item_channel_icon
 
         fun bind(channel: Channel, position: Int, storage: StorageReference, listener: OnChannelClickListener) {
@@ -65,11 +73,36 @@ class ChannelAdapter(val listener: OnChannelClickListener)
                 Glide.with(icon?.context)
                         .using(FirebaseImageLoader())
                         .load(storage.child(channel.id).child(channel.picture))
-                        .placeholder(R.drawable.channel_placeholder)
+                        .placeholder(ChannelListConfig.picturePlaceholder ?: ContextCompat.getDrawable(icon!!.context, R.drawable.channel_placeholder))
                         .bitmapTransform(CircleTransformation(icon!!.context))
                         .into(icon)
             }
             cell?.setOnClickListener { listener.onClick(channel) }
+
+            designWithConfig()
+        }
+
+        fun designWithConfig() {
+            with(name!!) {
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChannelListConfig.nameSize
+                        ?: context.resources.getDimension(R.dimen.item_channel_name_size))
+                setTextColor(ChannelListConfig.nameColour ?: context.resources.getColor(R.color.item_channel_name))
+            }
+            with(time!!) {
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChannelListConfig.timeSize
+                        ?: context.resources.getDimension(R.dimen.item_channel_time_size))
+                setTextColor(ChannelListConfig.timeColour ?: context.resources.getColor(R.color.item_channel_time))
+            }
+            with(lastMsg!!) {
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChannelListConfig.lastMsgSize
+                        ?: context.resources.getDimension(R.dimen.item_channel_last_msg_size))
+                setTextColor(ChannelListConfig.lastMsgColour ?: context.resources.getColor(R.color.item_channel_last_msg))
+            }
+            ChannelListConfig.pictureSize?.let {
+                icon?.layoutParams = ViewGroup.LayoutParams(it, it)
+            }
+            cell!!.background = ColorDrawable((ChannelListConfig.itemBackground ?: cell.context.resources.getColor(R.color.channel_list_item_background)))
+            divider!!.background = ColorDrawable((ChannelListConfig.dividerColour ?: cell.context.resources.getColor(R.color.channel_list_divider)))
         }
 
         interface OnChannelClickListener {

@@ -15,4 +15,7 @@
     <color name="chat_item_text_secondary">#8000</color>
     <color name="chat_bottom_bar_border">#bbb</color>
     <color name="chat_input_text">#000</color>
+    <color name="item_channel_name">#000</color>
+    <color name="item_channel_last_msg">#8000</color>
+    <color name="item_channel_time">#8000</color>
 </resources>

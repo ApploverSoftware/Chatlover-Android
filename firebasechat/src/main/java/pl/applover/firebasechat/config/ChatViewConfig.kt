@@ -1,8 +1,6 @@
 package pl.applover.firebasechat.config
 
-import android.graphics.Color
 import android.graphics.drawable.Drawable
-import pl.applover.firebasechat.model.Message
 
 /**
  * Created by sp0rk on 28/08/17.
