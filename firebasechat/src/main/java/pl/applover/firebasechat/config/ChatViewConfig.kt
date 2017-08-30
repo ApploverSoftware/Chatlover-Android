@@ -1,6 +1,8 @@
 package pl.applover.firebasechat.config
 
+import android.content.Context
 import android.graphics.drawable.Drawable
+import pl.applover.firebasechat.model.Message
 
 /**
  * Created by sp0rk on 28/08/17.
@@ -40,6 +42,10 @@ object ChatViewConfig {
 //    var iconVideo: Drawable? = null
 //    var iconVoice: Drawable? = null
 //    var iconMessageType: Drawable? = null
-
 //    var messageTypes: List<Message.Type>? = null
+
+    var onTxtClick: ((message:Message, context: Context) -> Unit)? = null
+    var onTxtLongClick: ((message:Message, context: Context) -> Unit)? = null
+    var onLocClick: ((message:Message, context: Context) -> Unit)? = null
+    var onLocLongClick: ((message:Message, context: Context) -> Unit)? = null
 }

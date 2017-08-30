@@ -124,12 +124,14 @@ class ChatAdapter(val channel: Channel,
         fun onMsgClicked(message: Message) {
             when (message.type) {
                 txt -> {
-                    Toast.makeText(bubble?.context, "Hold the message to copy its contents", Toast.LENGTH_SHORT).show()
+                    ChatViewConfig.onTxtClick?.invoke(message, bubble!!.context) ?:
+                            Toast.makeText(bubble?.context, "Hold the message to copy its contents", Toast.LENGTH_SHORT).show()
                 }
                 loc -> {
-                    with(message.body.split("/")) {
-                        openMap(get(0).toDouble(), get(1).toDouble())
-                    }
+                    ChatViewConfig.onLocClick?.invoke(message, bubble!!.context) ?:
+                            with(message.body.split("/")) {
+                                openMap(get(0).toDouble(), get(1).toDouble())
+                            }
                 }
                 img -> TODO("Not yet supported")
                 vid -> TODO("Not yet supported")
@@ -141,10 +143,12 @@ class ChatAdapter(val channel: Channel,
         fun onMsgLongClicked(message: Message) = true.also {
             when (message.type) {
                 txt -> {
-                    copy(message.body, "message")
+                    ChatViewConfig.onTxtLongClick?.invoke(message, bubble!!.context) ?:
+                            copy(message.body, "message")
                 }
                 loc -> {
-                    message.body.toAddressAsync(bubble!!.context, { copy(it, "address") })
+                    ChatViewConfig.onLocLongClick?.invoke(message, bubble!!.context) ?:
+                            message.body.toAddressAsync(bubble!!.context, { copy(it, "address") })
                 }
                 img -> TODO("Not yet supported")
                 vid -> TODO("Not yet supported")
