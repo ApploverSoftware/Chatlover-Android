@@ -23,30 +23,36 @@ import pl.applover.firebasechat.model.Message
 class FirebaseChatMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         super.onMessageReceived(remoteMessage)
-        if (NotificationsConfig.areNotificationsEnabled ?: true) {
-            val data = JSONObject(remoteMessage!!.data)
+        handleChatMessage(remoteMessage, this)
+    }
 
-            val intent = Intent(this, NotificationsConfig.notificationTarget)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            val pendingIntent = PendingIntent.getActivity(this, 1410,
-                    intent, PendingIntent.FLAG_ONE_SHOT)
+    companion object {
+        fun handleChatMessage(remoteMessage: RemoteMessage?, context: Context) {
+            if (NotificationsConfig.areNotificationsEnabled ?: true) {
+                val data = JSONObject(remoteMessage!!.data)
 
-            val notification = NotificationsConfig.notificationCreator?.invoke(
-                    remoteMessage.notification.title,
-                    remoteMessage.notification.body,
-                    Gson().fromJson(data.getString("message"), Message::class.java),
-                    Gson().fromJson(data.getString("channel"), Channel::class.java),
-                    Gson().fromJson(data.getString("sender"), ChatUser::class.java)
-            ) ?: NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_location)
-                    .setContentTitle(remoteMessage.notification.title)
-                    .setContentText(remoteMessage.notification.body)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent).build()
+                val intent = Intent(context, NotificationsConfig.notificationTarget)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                val pendingIntent = PendingIntent.getActivity(context, 1410,
+                        intent, PendingIntent.FLAG_ONE_SHOT)
 
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val notification = NotificationsConfig.notificationCreator?.invoke(
+                        remoteMessage.notification.title,
+                        remoteMessage.notification.body,
+                        Gson().fromJson(data.getString("message"), Message::class.java),
+                        Gson().fromJson(data.getString("channel"), Channel::class.java),
+                        Gson().fromJson(data.getString("sender"), ChatUser::class.java)
+                ) ?: NotificationCompat.Builder(context)
+                        .setSmallIcon(R.drawable.ic_location)
+                        .setContentTitle(remoteMessage.notification.title)
+                        .setContentText(remoteMessage.notification.body)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent).build()
 
-            notificationManager.notify(1410, notification)
+                val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+                notificationManager.notify(1410, notification)
+            }
         }
     }
 }
