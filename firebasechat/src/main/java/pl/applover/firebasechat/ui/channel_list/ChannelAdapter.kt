@@ -71,13 +71,17 @@ class ChannelAdapter(val listener: OnChannelClickListener)
             channel.picture?.let {
                 Glide.with(icon?.context)
                         .using(FirebaseImageLoader())
-                        .load(storage.child(channel.id).child(channel.picture))
+                        .load(ChannelListConfig.pictureDecider?.invoke(
+                                channel,
+                                storage,
+                                FirebaseStorage.getInstance().reference
+                                        .child("chatlover").child("chat_user"))
+                                ?: storage.child(channel.id).child(channel.picture))
                         .placeholder(ChannelListConfig.picturePlaceholder ?: ContextCompat.getDrawable(icon!!.context, R.drawable.channel_placeholder))
                         .bitmapTransform(CircleTransformation(icon!!.context))
                         .into(icon)
             }
             cell?.setOnClickListener { listener.onClick(channel) }
-
             designWithConfig()
         }
 
