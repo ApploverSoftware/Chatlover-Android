@@ -13,6 +13,6 @@ object NotificationsConfig {
     var notificationTarget: Class<out Activity>? = null
     var areNotificationsEnabled: Boolean? = null
     var notificationCreator: ((title: String?, body: String?, message: Message,
-                               channel: Channel, sender: ChatUser)->Notification)? = null
+                               channel: Channel, sender: ChatUser) -> Notification)? = null
 
 }

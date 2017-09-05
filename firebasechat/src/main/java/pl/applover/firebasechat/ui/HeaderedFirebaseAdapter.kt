@@ -159,7 +159,7 @@ abstract class HeaderedFirebaseAdapter<in IH : ViewHolder, in HH : ViewHolder, M
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         items?.let {
             val previous = if (position > 0 && position < items!!.size) items!![position - 1] else null
-            val next = if (position < items!!.size-1) items!![position + 1] else null
+            val next = if (position < items!!.size - 1) items!![position + 1] else null
             if (getItemViewType(position) == HEADER)
                 populateHeader(holder as HH, previous, next, position)
             else
@@ -182,7 +182,7 @@ abstract class HeaderedFirebaseAdapter<in IH : ViewHolder, in HH : ViewHolder, M
     }
 
     fun getIndexOf(item: M, valIfAbsent: Int = -1): Int {
-        return if (items?.isNotEmpty()?:false) items!!.indexOf(item) else valIfAbsent
+        return if (items?.isNotEmpty() ?: false) items!!.indexOf(item) else valIfAbsent
     }
 
     operator fun contains(item: M): Boolean {

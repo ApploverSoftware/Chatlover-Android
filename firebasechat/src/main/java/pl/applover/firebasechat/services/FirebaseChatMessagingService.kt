@@ -49,9 +49,4 @@ class FirebaseChatMessagingService : FirebaseMessagingService() {
             notificationManager.notify(1410, notification)
         }
     }
-
-    fun handleDefault() {
-
-    }
-
 }

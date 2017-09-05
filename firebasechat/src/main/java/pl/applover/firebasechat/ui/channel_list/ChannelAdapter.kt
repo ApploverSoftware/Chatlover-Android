@@ -19,7 +19,6 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.item_channel_list.view.*
 import pl.applover.firebasechat.R
 import pl.applover.firebasechat.config.ChannelListConfig
-import pl.applover.firebasechat.config.ChatViewConfig
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.ChatUser
 import pl.applover.firebasechat.ui.CircleTransformation

@@ -57,7 +57,7 @@ class ChatFragment : Fragment() {
         recyclerView.adapter = ChatAdapter(channel, currentUserId, llm, recyclerView).withAutoscroll()
 
         send.setOnClickListener { onSend() }
-        sendLocation.setup(activity, manager, 3000){l: Location? ->
+        sendLocation.setup(activity, manager, 3000) { l: Location? ->
             l?.let {
                 val db = FirebaseDatabase.getInstance().reference
                 with(db.child("channels").child(channel.id).child("messages").push()) {
@@ -92,17 +92,17 @@ class ChatFragment : Fragment() {
         }
     }
 
-    fun designWithConfig(){
-        send.setImageDrawable(ChatViewConfig.iconSend?:ContextCompat.getDrawable(context, R.drawable.ic_send))
-        sendLocation.setImageDrawable(ChatViewConfig.iconLocation?:ContextCompat.getDrawable(context, R.drawable.ic_location))
+    fun designWithConfig() {
+        send.setImageDrawable(ChatViewConfig.iconSend ?: ContextCompat.getDrawable(context, R.drawable.ic_send))
+        sendLocation.setImageDrawable(ChatViewConfig.iconLocation ?: ContextCompat.getDrawable(context, R.drawable.ic_location))
 
         with(input) {
-            background = ChatViewConfig.inputBackground?:ContextCompat.getDrawable(context, R.drawable.chat_input_background)
+            background = ChatViewConfig.inputBackground ?: ContextCompat.getDrawable(context, R.drawable.chat_input_background)
             hint = ChatViewConfig.inputHint ?: context.getString(R.string.chat_input_hint)
             maxLines = ChatViewConfig.inputMaxLines ?: 4
             setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.inputTextSize
                     ?: context.resources.getDimension(R.dimen.input_text_size))
-            setTextColor(ChatViewConfig.inputTextColour?:context.resources.getColor(R.color.chat_input_text))
+            setTextColor(ChatViewConfig.inputTextColour ?: context.resources.getColor(R.color.chat_input_text))
         }
     }
 

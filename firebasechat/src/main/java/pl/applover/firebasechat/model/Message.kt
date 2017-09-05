@@ -35,5 +35,5 @@ data class Message(val id: String, val sender: String, val time: Long, val body:
 
     fun provideCalendar() = Calendar.getInstance().also { it.timeInMillis = time }
 
-    enum class Type {txt, img, vid, loc, mic}
+    enum class Type {txt, img, vid, loc, mic }
 }

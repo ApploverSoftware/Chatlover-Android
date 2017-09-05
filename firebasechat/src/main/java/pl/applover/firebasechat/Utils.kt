@@ -15,7 +15,7 @@ fun String.toAddressAsync(context: Context, completion: (address: String) -> Uni
     val lon = get(1).toDouble()
     val lines = Geocoder(context, Locale.getDefault()).getFromLocation(lat, lon, 1)[0]
     var address = ""
-    for (i in 0 .. lines.maxAddressLineIndex) {
+    for (i in 0..lines.maxAddressLineIndex) {
         address += lines.getAddressLine(i) + "\n"
     }
     completion(address.trim())

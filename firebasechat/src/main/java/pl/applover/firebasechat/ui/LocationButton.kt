@@ -17,9 +17,7 @@ import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.widget.ImageView
 import android.widget.Toast
-import com.google.firebase.database.FirebaseDatabase
 import pl.applover.firebasechat.R
-import pl.applover.firebasechat.model.Message
 
 /**
  * Created by sp0rk on 24/08/17.
@@ -31,18 +29,18 @@ class LocationButton @JvmOverloads constructor(
 
     lateinit var activity: Activity
     lateinit var manager: LocationManager
-    lateinit var onSend: (l:Location?)->Unit
+    lateinit var onSend: (l: Location?) -> Unit
     var timeout: Long = 5000
 
-    fun setup(activity: Activity, manager: LocationManager, timeout: Long, onSend: (l:Location?)->Unit){
+    fun setup(activity: Activity, manager: LocationManager, timeout: Long, onSend: (l: Location?) -> Unit) {
         this.activity = activity
         this.manager = manager
         this.onSend = onSend
         this.timeout = timeout
-        setOnClickListener{requestLocation()}
+        setOnClickListener { requestLocation() }
     }
 
-    private fun startAnim(){
+    private fun startAnim() {
         isClickable = false
         anim = ObjectAnimator.ofPropertyValuesHolder(this,
                 PropertyValuesHolder.ofFloat("scaleX", 1.2f),

@@ -11,6 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.BitmapResource
 
 class CircleTransformation(private val pool: BitmapPool) : Transformation<Bitmap> {
     constructor(ctx: Context) : this(Glide.get(ctx).bitmapPool)
+
     override fun transform(res: Resource<Bitmap>, widthOut: Int, heightOut: Int): Resource<Bitmap> {
         val src = res.get()
         val size = Math.min(src.width, src.height)

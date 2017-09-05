@@ -44,8 +44,8 @@ object ChatViewConfig {
 //    var iconMessageType: Drawable? = null
 //    var messageTypes: List<Message.Type>? = null
 
-    var onTxtClick: ((message:Message, context: Context) -> Unit)? = null
-    var onTxtLongClick: ((message:Message, context: Context) -> Unit)? = null
-    var onLocClick: ((message:Message, context: Context) -> Unit)? = null
-    var onLocLongClick: ((message:Message, context: Context) -> Unit)? = null
+    var onTxtClick: ((message: Message, context: Context) -> Unit)? = null
+    var onTxtLongClick: ((message: Message, context: Context) -> Unit)? = null
+    var onLocClick: ((message: Message, context: Context) -> Unit)? = null
+    var onLocLongClick: ((message: Message, context: Context) -> Unit)? = null
 }
