@@ -35,7 +35,7 @@ class RoundedFrameLayout : FrameLayout {
         var radius = 0f
         with(context.theme.obtainStyledAttributes(attrs, R.styleable.RoundedFrameLayout, 0, 0)) {
             try {
-                radius = getFloat(R.styleable.RoundedFrameLayout_radius, 0f)
+                radius = getFloat(R.styleable.RoundedFrameLayout_rflradius, 0f)
             } finally {
                 recycle()
             }

@@ -46,16 +46,14 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
     }
 
     fun init() {
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            ChatUser.loginWithUid(FirebaseAuth.getInstance().currentUser!!.uid) {
+        FirebaseAuth.getInstance().currentUser?.let {
+            ChatUser.loginWithUid(it.uid, it.displayName!!) {
                 supportFragmentManager
                         .beginTransaction()
                         .add(R.id.container, ChannelListFragment.newInstance().withListener(this))
                         .commit()
             }
-        } else {
-            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setIsSmartLockEnabled(false).build(), 1)
-        }
+        } ?: startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().setIsSmartLockEnabled(false).build(), 1)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -63,7 +61,7 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
         if (requestCode == 1) {
             if (resultCode == ResultCodes.OK) {
                 FirebaseAuth.getInstance().currentUser?.let {
-                    ChatUser.loginWithUid(it.uid, it.displayName) {
+                    ChatUser.loginWithUid(it.uid, it.displayName!!) {
                         init()
                     }
                 }
@@ -73,5 +71,4 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
             }
         }
     }
-
 }

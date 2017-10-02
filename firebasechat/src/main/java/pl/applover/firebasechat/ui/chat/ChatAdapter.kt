@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
@@ -119,6 +120,7 @@ class ChatAdapter(val channel: Channel,
             setType(message, channel.users[message.sender])
             bubble?.setOnClickListener { onMsgClicked(message) }
             bubble?.setOnLongClickListener { onMsgLongClicked(message) }
+            avatar?.setOnClickListener { ChatViewConfig.avatarOnClick?.invoke(channel.users[message.sender]!!) }
         }
 
         fun onMsgClicked(message: Message) {
@@ -235,7 +237,7 @@ class ChatAdapter(val channel: Channel,
                                 .placeholder(placeholder)
                                 .bitmapTransform(CircleTransformation(avatar!!.context))
                                 .into(avatar)
-                    }
+                    } ?: avatar?.setImageDrawable(placeholder)
                 }
                 lr?.gravity = Gravity.START
                 bubble?.background?.setColorFilter(ChatViewConfig.bubbleColourOther
@@ -247,6 +249,8 @@ class ChatAdapter(val channel: Channel,
 
     class DayHeaderHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
         val label = itemView?.day_header_label
+        val lineLeft = itemView?._day_header_left_line
+        val lineRight = itemView?._day_header_right_line
         fun bind(text: String) {
             if (!(ChatViewConfig.headerIsShown ?: true))
                 itemView.visibility = View.GONE
@@ -255,6 +259,10 @@ class ChatAdapter(val channel: Channel,
                     ?: label.context.resources.getDimension(R.dimen.header_text_size))
             label?.setTextColor(ChatViewConfig.headerColour
                     ?: label.context.resources.getColor(R.color.chat_day_header_color))
+            lineLeft?.background = ColorDrawable(ChatViewConfig.headerColour
+                    ?: lineLeft!!.context.resources.getColor(R.color.chat_day_header_color))
+            lineRight?.background = ColorDrawable(ChatViewConfig.headerColour
+                    ?: lineRight!!.context.resources.getColor(R.color.chat_day_header_color))
         }
     }
 }

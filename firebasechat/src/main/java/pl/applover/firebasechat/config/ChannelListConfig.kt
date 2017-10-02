@@ -1,6 +1,7 @@
 package pl.applover.firebasechat.config
 
 import android.graphics.drawable.Drawable
+import android.view.View
 import com.google.firebase.storage.StorageReference
 import pl.applover.firebasechat.model.Channel
 
@@ -16,6 +17,7 @@ object ChannelListConfig {
 
     var nameSize: Float? = null
     var nameColour: Int? = null
+    var nameDecider: ((channel: Channel) -> String)? = null
 
     var lastMsgSize: Float? = null
     var lastMsgColour: Int? = null
@@ -25,4 +27,6 @@ object ChannelListConfig {
 
     var itemBackground: Int? = null
     var dividerColour: Int? = null
+
+    var onFragmentViewCreated: ((View?)->Unit)? = null
 }

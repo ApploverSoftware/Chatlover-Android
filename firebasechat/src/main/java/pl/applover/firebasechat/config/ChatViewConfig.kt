@@ -2,6 +2,9 @@ package pl.applover.firebasechat.config
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.view.View
+import pl.applover.firebasechat.model.Channel
+import pl.applover.firebasechat.model.ChatUser
 import pl.applover.firebasechat.model.Message
 
 /**
@@ -29,6 +32,7 @@ object ChatViewConfig {
     var avatarIsShown: Boolean? = null
     var avatarSize: Int? = null
     var avatarPlaceholder: Drawable? = null
+    var avatarOnClick: ((ChatUser) -> Unit)? = null
 
     var inputBackground: Drawable? = null
     var inputHint: String? = null
@@ -48,4 +52,7 @@ object ChatViewConfig {
     var onTxtLongClick: ((message: Message, context: Context) -> Unit)? = null
     var onLocClick: ((message: Message, context: Context) -> Unit)? = null
     var onLocLongClick: ((message: Message, context: Context) -> Unit)? = null
+
+    var onFragmentViewCreated: ((View?, Channel) -> Unit)? = null
+    var onBackPressed: (() -> Unit)? = null
 }

@@ -1,6 +1,7 @@
 package pl.applover.firebasechat.services
 
 import com.google.firebase.iid.FirebaseInstanceIdService
+import pl.applover.firebasechat.config.NotificationsConfig
 import pl.applover.firebasechat.model.ChatUser
 
 /**
@@ -9,6 +10,6 @@ import pl.applover.firebasechat.model.ChatUser
 class FirebaseChatInstanceIdService : FirebaseInstanceIdService() {
     override fun onTokenRefresh() {
         super.onTokenRefresh()
-        ChatUser.refreshCurrentToken()
+        NotificationsConfig.onTokenRefresh?.invoke()?:ChatUser.refreshCurrentToken()
     }
 }

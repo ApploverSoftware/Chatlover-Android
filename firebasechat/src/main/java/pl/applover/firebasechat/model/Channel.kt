@@ -2,6 +2,10 @@ package pl.applover.firebasechat.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 /**
  * Created by sp0rk on 10/08/17.
@@ -35,9 +39,26 @@ class Channel(val id: String, val name: String, val users: HashMap<String, ChatU
 
     override fun describeContents() = 0
 
-    companion object CREATOR : Parcelable.Creator<Channel> {
-        override fun createFromParcel(p: Parcel) = Channel(p)
-        override fun newArray(s: Int): Array<Channel?> = arrayOfNulls(s)
-    }
+    companion object {
+        val CREATOR = object : Parcelable.Creator<Channel> {
+            override fun createFromParcel(p: Parcel) = Channel(p)
+            override fun newArray(s: Int): Array<Channel?> = arrayOfNulls(s)
+        }
 
+        fun provideChannel(channelId: String, completion: (Channel?) -> Unit) {
+            FirebaseDatabase.getInstance().reference.child("channels").child(channelId).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError?) {
+                    completion(null)
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot?) {
+                    snapshot?.let {
+                        completion(snapshot.getValue(Channel::class.java))
+                    } ?: run {
+                        completion(null)
+                    }
+                }
+            })
+        }
+    }
 }

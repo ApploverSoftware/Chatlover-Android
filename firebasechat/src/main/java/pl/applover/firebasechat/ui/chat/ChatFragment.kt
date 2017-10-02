@@ -4,21 +4,21 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_chat.*
 import pl.applover.firebasechat.R
+import pl.applover.firebasechat.config.ChannelListConfig
 import pl.applover.firebasechat.config.ChatViewConfig
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.Message
@@ -29,7 +29,7 @@ import pl.applover.firebasechat.ui.LocationButton
  */
 class ChatFragment : Fragment() {
     var listener: ChatListener? = null
-    val recyclerView: RecyclerView by lazy { chat_recycler_view }
+    lateinit var recyclerView: RecyclerView
     val input: EditText by lazy { chat_input_field }
     val send: ImageView by lazy { chat_send_btn }
     val sendLocation: LocationButton by lazy { chat_location_btn }
@@ -37,16 +37,12 @@ class ChatFragment : Fragment() {
     val currentUserId by lazy { arguments.getString("currentUserId") }
     lateinit var manager: LocationManager
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-    }
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater?.inflate(R.layout.fragment_chat, container, false)
-
+        recyclerView = root!!.findViewById<RecyclerView>(R.id.chat_recycler_view)
+        manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-
+        setHasOptionsMenu(ChatViewConfig.onBackPressed!=null)
         return root
     }
 
@@ -73,6 +69,7 @@ class ChatFragment : Fragment() {
             } ?: Toast.makeText(context, "No location", Toast.LENGTH_SHORT).show()
         }
         designWithConfig()
+        ChatViewConfig.onFragmentViewCreated?.invoke(view, channel)
     }
 
     fun onSend() {
@@ -119,6 +116,13 @@ class ChatFragment : Fragment() {
             return fragment
         }
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            android.R.id.home -> ChatViewConfig.onBackPressed?.invoke()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {

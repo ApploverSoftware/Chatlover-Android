@@ -39,7 +39,7 @@ data class ChatUser(val uid: String, val name: String, var fcmToken: String? = n
     override fun describeContents() = 0
 
     companion object {
-        fun loginWithUid(id: String, name: String? = null, completion: (() -> Unit)? = null) {
+        fun loginWithUid(id: String, name: String, completion: (() -> Unit)? = null) {
             FirebaseDatabase.getInstance().reference.child("chat_users").child(id).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(err: DatabaseError?) {
                     TODO("not implemented")
@@ -50,7 +50,7 @@ data class ChatUser(val uid: String, val name: String, var fcmToken: String? = n
                         current = snap?.getValue(ChatUser::class.java)
                         refreshCurrentToken(completion)
                     } else {
-                        val user = ChatUser(id, name ?: "")
+                        val user = ChatUser(id, name)
                         FirebaseDatabase.getInstance().reference
                                 .child("chat_users").child(id).setValue(user).addOnCompleteListener {
                             current = user
@@ -65,7 +65,7 @@ data class ChatUser(val uid: String, val name: String, var fcmToken: String? = n
             FirebaseInstanceId.getInstance().token?.let {
                 if (it.isNotEmpty()) {
                     current?.fcmToken = it
-                    current?.save(completion)
+                    FirebaseDatabase.getInstance().reference.child("chat_users").child(current!!.uid).child("fcmToken").setValue(it).addOnCompleteListener{completion?.invoke()}
                 }
             }
         }

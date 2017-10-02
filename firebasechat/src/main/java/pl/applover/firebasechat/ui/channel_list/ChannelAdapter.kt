@@ -60,7 +60,7 @@ class ChannelAdapter(val listener: OnChannelClickListener)
         val icon: ImageView? = itemView?.item_channel_icon
 
         fun bind(channel: Channel, position: Int, storage: StorageReference, listener: OnChannelClickListener) {
-            name?.text = channel.name
+            name?.text = ChannelListConfig.nameDecider?.invoke(channel)?:channel.name
             if (channel.messageList.isNotEmpty()) {
                 lastMsg?.text = channel.messageList.last().body
                 time?.text = DateUtils.getRelativeTimeSpanString(channel.messageList.last().time)
@@ -80,7 +80,7 @@ class ChannelAdapter(val listener: OnChannelClickListener)
                         .placeholder(ChannelListConfig.picturePlaceholder ?: ContextCompat.getDrawable(icon!!.context, R.drawable.channel_placeholder))
                         .bitmapTransform(CircleTransformation(icon!!.context))
                         .into(icon)
-            }
+            } ?: icon?.setImageDrawable(ChannelListConfig.picturePlaceholder ?: ContextCompat.getDrawable(icon.context, R.drawable.channel_placeholder))
             cell?.setOnClickListener { listener.onClick(channel) }
             designWithConfig()
         }

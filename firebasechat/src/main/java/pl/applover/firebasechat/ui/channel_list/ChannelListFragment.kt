@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import kotlinx.android.synthetic.main.fragment_channel_list.*
 import pl.applover.firebasechat.R
+import pl.applover.firebasechat.config.ChannelListConfig
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.ui.channel_list.ChannelAdapter.ChannelHolder.OnChannelClickListener
 
@@ -18,11 +18,16 @@ import pl.applover.firebasechat.ui.channel_list.ChannelAdapter.ChannelHolder.OnC
  */
 class ChannelListFragment : Fragment(), OnChannelClickListener {
     var listener: ChannelListListener? = null
-    val recyclerView: RecyclerView by lazy { list_recycler_view }
-
+    lateinit var recyclerView: RecyclerView
+    private var channelId: String? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        channelId = arguments.getString("channelId")
+        arguments.remove("channelId")
+    }
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater?.inflate(R.layout.fragment_channel_list, container, false)
-
+        recyclerView = root!!.findViewById<RecyclerView>(R.id.list_recycler_view)
         activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         return root
@@ -32,6 +37,15 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
         super.onViewCreated(view, savedInstanceState)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = ChannelAdapter(this)
+
+        ChannelListConfig.onFragmentViewCreated?.invoke(view)
+
+        if (channelId?.isNotEmpty()?:false) {
+            Channel.provideChannel(channelId!!) {
+                if (it != null) listener?.onChatRequested(it)
+                channelId = null
+            }
+        }
     }
 
     override fun onClick(channel: Channel) {
@@ -41,7 +55,14 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
     fun withListener(listener: ChannelListListener) = this.also { this.listener = listener }
 
     companion object {
-        fun newInstance() = ChannelListFragment()
+        fun newInstance(channelId: String? = null): ChannelListFragment {
+            val fragment = ChannelListFragment()
+            with(Bundle()) {
+                putString("channelId", channelId)
+                fragment.arguments = this
+            }
+            return fragment
+        }
     }
 
     interface ChannelListListener {
@@ -50,6 +71,6 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (recyclerView.adapter as? ChannelAdapter)?.destroy()
+        (recyclerView.adapter as ChannelAdapter).destroy()
     }
 }
