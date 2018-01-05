@@ -36,4 +36,6 @@ object ChannelListConfig {
             else throw IllegalStateException("Maximum number of swipe actions is 4")
         }
 
+    var swipeActionWidth: Float = 48f
+
 }

@@ -1,6 +1,7 @@
 package pl.applover.firebasechatsample
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
@@ -9,6 +10,7 @@ import com.firebase.ui.auth.ResultCodes
 import com.google.firebase.auth.FirebaseAuth
 import pl.applover.firebasechat.config.ChannelListConfig
 import pl.applover.firebasechat.config.NotificationsConfig
+import pl.applover.firebasechat.config.SwipeAction
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.ChatUser
 import pl.applover.firebasechat.ui.channel_list.ChannelListFragment
@@ -45,6 +47,13 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
                 return@let s.child("chatlover").child("chat_user").child(it.uid).child(it.avatar ?: "ERROR")
             } ?: s.child("ERROR")
         }
+        ChannelListConfig.swipeActions = listOf(SwipeAction("Test", Color.LTGRAY,
+                Color.DKGRAY, getDrawable(R.drawable.stf_ic_empty), {
+            Toast.makeText(this, "test action", Toast.LENGTH_SHORT).show()
+        }),SwipeAction("Test2", Color.DKGRAY,
+                Color.LTGRAY, getDrawable(R.drawable.stf_ic_offline), {
+            Toast.makeText(this, "test action", Toast.LENGTH_SHORT).show()
+        }))
     }
 
     override fun onBackPressed() {

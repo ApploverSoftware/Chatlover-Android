@@ -8,7 +8,8 @@ import android.support.annotation.ColorInt
  */
 data class SwipeAction<in T>(
         val name: String,
-        @ColorInt val colour: Int,
+        @ColorInt val bgColour: Int,
+        @ColorInt val textColour: Int,
         val icon: Drawable,
         val action: (T)->Unit
 )

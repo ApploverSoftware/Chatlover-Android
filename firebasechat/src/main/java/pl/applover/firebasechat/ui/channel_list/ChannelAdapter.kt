@@ -17,6 +17,7 @@ import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.item_channel_list.view.*
 import pl.applover.firebasechat.R
 import pl.applover.firebasechat.config.ChannelListConfig
+import pl.applover.firebasechat.convertDpToPixel
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.ChatUser
 import pl.applover.firebasechat.ui.CircleTransformation
@@ -59,6 +60,7 @@ class ChannelAdapter(val listener: OnChannelClickListener)
         var latestSwipe: SwipeLayout? = null
         val swipes = listOf(itemView?.swipe_0, itemView?.swipe_1, itemView?.swipe_2, itemView?.swipe_3)
         val swipeIcon: ImageView? = itemView?.swipe_icon
+        val swipeDrawer: LinearLayout? = itemView?.notifications_bottom_wrapper
 
         val onToggle = object : SwipeLayout.SwipeListener {
             override fun onOpen(layout: SwipeLayout?) {}
@@ -125,16 +127,19 @@ class ChannelAdapter(val listener: OnChannelClickListener)
         }
 
         private fun bindSwipeActions(channel: Channel) {
+            swipeDrawer?.layoutParams = FrameLayout.LayoutParams(convertDpToPixel(ChannelListConfig.swipeActions.size * ChannelListConfig.swipeActionWidth),
+                    FrameLayout.LayoutParams.MATCH_PARENT)
             swipeIcon?.visibility = View.VISIBLE
             ChannelListConfig.swipeActions.forEachIndexed { i, action ->
                 with(swipes[i]!!) {
                     visibility = View.VISIBLE
-                    background = ColorDrawable(action.colour)
+                    background = ColorDrawable(action.bgColour)
                     with(getChildAt(0) as LinearLayout) {
                         val icon = getChildAt(0) as ImageView
                         val text = getChildAt(1) as TextView
                         icon.setImageDrawable(action.icon)
                         text.text = action.name
+                        text.setTextColor(action.textColour)
                     }
                     setOnClickListener { action.action(channel) }
                 }
