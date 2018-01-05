@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ResultCodes
 import com.google.firebase.auth.FirebaseAuth
+import pl.applover.firebasechat.config.ChannelListConfig
 import pl.applover.firebasechat.config.NotificationsConfig
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.ChatUser
@@ -39,6 +40,11 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
 
     private fun config() {
         NotificationsConfig.notificationTarget = MainActivity::class.java
+        ChannelListConfig.pictureDecider = { c, s, cs ->
+            c.userList.find { it.uid != ChatUser.current?.uid }?.let {
+                return@let s.child("chatlover").child("chat_user").child(it.uid).child(it.avatar ?: "ERROR")
+            } ?: s.child("ERROR")
+        }
     }
 
     override fun onBackPressed() {

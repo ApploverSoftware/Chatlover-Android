@@ -133,7 +133,7 @@ class ChatAdapter(val channel: Channel,
                 other.avatar?.let {
                     Glide.with(avatarEntry.context)
                             .using(FirebaseImageLoader())
-                            .load(storage.child(other.uid).child("photos").child(other.avatar))
+                            .load(storage.child("chatlover").child("chat_user").child(other.uid).child(other.avatar))
                             .placeholder(placeholder)
                             .bitmapTransform(CircleTransformation(avatarEntry.context))
                             .into(avatarEntry)
@@ -273,7 +273,7 @@ class ChatAdapter(val channel: Channel,
                         user.avatar?.let {
                             Glide.with(avatar?.context)
                                     .using(FirebaseImageLoader())
-                                    .load(storage.child(user.uid).child("photos").child(user.avatar))
+                                    .load(storage.child("chatlover").child("chat_user").child(user.uid).child(user.avatar))
                                     .placeholder(placeholder)
                                     .bitmapTransform(CircleTransformation(avatar!!.context))
                                     .into(avatar)
