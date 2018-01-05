@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
         supportFragmentManager
                 .beginTransaction()
                 .add(R.id.container, ChatFragment.newInstance(channel, ChatUser.current?.uid ?: "").withListener(this))
-                .addToBackStack("asdads")
+                .addToBackStack(ChatFragment.TAG)
                 .commit()
     }
 
@@ -30,6 +30,10 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
         super.onCreate(savedInstanceState)
         config()
         setContentView(R.layout.activity_main)
+    }
+
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
         init()
     }
 
@@ -46,7 +50,7 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
             }
     }
 
-    fun init() {
+    private fun init() {
         FirebaseAuth.getInstance().currentUser?.let {
             ChatUser.loginWithUid(it.uid, it.displayName!!) {
                 supportFragmentManager
