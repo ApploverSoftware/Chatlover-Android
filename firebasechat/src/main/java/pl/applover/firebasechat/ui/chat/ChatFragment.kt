@@ -65,7 +65,7 @@ class ChatFragment : Fragment() {
         chat_location_btn.setup(activity, manager, 3000) { l: Location? ->
             l?.let {
                 val db = FirebaseDatabase.getInstance().reference
-                with(db.child("channels").child(channel.id).child("messages").push()) {
+                with(db.child("chatlover").child("channels").child(channel.id).child("messages").push()) {
                     ref.setValue(Message(
                             key,
                             currentUserId,
@@ -81,7 +81,7 @@ class ChatFragment : Fragment() {
     fun onSend() {
         if (chat_input_field.text.toString().trim().isNotEmpty()) {
             val db = FirebaseDatabase.getInstance().reference
-            with(db.child("channels").child(channel.id).child("messages").push()) {
+            with(db.child("chatlover").child("channels").child(channel.id).child("messages").push()) {
                 ref.setValue(Message(
                         key,
                         currentUserId,
@@ -112,7 +112,7 @@ class ChatFragment : Fragment() {
     fun withListener(listener: ChatListener) = this.also { this.listener = listener }
 
     companion object {
-        val TAG = "ChatFragment"
+        val TAG = "ChatloverChatFragment"
 
         fun newInstance(channel: Channel, currentUserId: String): ChatFragment {
             val fragment = ChatFragment()

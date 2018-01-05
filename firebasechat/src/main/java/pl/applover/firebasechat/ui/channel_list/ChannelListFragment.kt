@@ -84,7 +84,7 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
     fun withListener(listener: ChannelListListener) = this.also { this.listener = listener }
 
     companion object {
-        val TAG = "ChannelListFragment"
+        val TAG = "ChatloverChannelListFragment"
         fun newInstance(channelId: String? = null): ChannelListFragment {
             val fragment = ChannelListFragment()
             with(Bundle()) {

@@ -16,7 +16,7 @@ data class ChatUser(val uid: String, val name: String, var fcmToken: String? = n
     constructor() : this("", "") //needed for firebase
 
     fun save(completion: (() -> Unit)? = null) {
-        FirebaseDatabase.getInstance().reference.child("chat_users").child(uid).setValue(this).addOnCompleteListener {
+        FirebaseDatabase.getInstance().reference.child("chatlover").child("chat_users").child(uid).setValue(this).addOnCompleteListener {
             completion?.invoke()
         }
     }
@@ -40,7 +40,7 @@ data class ChatUser(val uid: String, val name: String, var fcmToken: String? = n
 
     companion object {
         fun loginWithUid(id: String, name: String, completion: (() -> Unit)? = null) {
-            FirebaseDatabase.getInstance().reference.child("chat_users").child(id).addListenerForSingleValueEvent(object : ValueEventListener {
+            FirebaseDatabase.getInstance().reference.child("chatlover").child("chat_users").child(id).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(err: DatabaseError?) {
                     TODO("not implemented")
                 }
@@ -51,7 +51,7 @@ data class ChatUser(val uid: String, val name: String, var fcmToken: String? = n
                         refreshCurrentToken(completion)
                     } else {
                         val user = ChatUser(id, name)
-                        FirebaseDatabase.getInstance().reference
+                        FirebaseDatabase.getInstance().reference.child("chatlover")
                                 .child("chat_users").child(id).setValue(user).addOnCompleteListener {
                             current = user
                             refreshCurrentToken(completion)
@@ -65,7 +65,7 @@ data class ChatUser(val uid: String, val name: String, var fcmToken: String? = n
             FirebaseInstanceId.getInstance().token?.let {
                 if (it.isNotEmpty()) {
                     current?.fcmToken = it
-                    FirebaseDatabase.getInstance().reference.child("chat_users").child(current!!.uid).child("fcmToken").setValue(it).addOnCompleteListener{completion?.invoke()}
+                    FirebaseDatabase.getInstance().reference.child("chatlover").child("chat_users").child(current!!.uid).child("fcmToken").setValue(it).addOnCompleteListener{completion?.invoke()}
                 }
             }
         }

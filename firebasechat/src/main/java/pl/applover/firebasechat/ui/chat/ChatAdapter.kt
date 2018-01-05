@@ -47,7 +47,7 @@ class ChatAdapter(val channel: Channel,
                   val layoutManager: LinearLayoutManager,
                   val recyclerView: RecyclerView)
     : HeaderedFirebaseAdapter<MessageHolder, DayHeaderHolder, Message>(
-        FirebaseDatabase.getInstance().reference.child("channels").child(channel.id).child("messages"),
+        FirebaseDatabase.getInstance().reference.child("chatlover").child("channels").child(channel.id).child("messages"),
         Message::class.java, MessageHolder::class.java, DayHeaderHolder::class.java,
         R.layout.item_message, R.layout.item_day_header,
         createDayHeaderDecider()

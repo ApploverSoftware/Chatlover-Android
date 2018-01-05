@@ -29,7 +29,7 @@ import pl.applover.firebasechat.ui.channel_list.ChannelAdapter.ChannelHolder.OnC
  */
 class ChannelAdapter(val listener: OnChannelClickListener)
     : HeaderedFirebaseAdapter<ChannelHolder, ChannelHolder, Channel>(
-        FirebaseDatabase.getInstance().reference.child("channel_by_user").child(ChatUser.current!!.uid),
+        FirebaseDatabase.getInstance().reference.child("chatlover").child("channel_by_user").child(ChatUser.current!!.uid),
         Channel::class.java, ChannelHolder::class.java, ChannelHolder::class.java,
         R.layout.item_channel_list, R.layout.item_channel_list, createDayHeaderDecider()) {
 

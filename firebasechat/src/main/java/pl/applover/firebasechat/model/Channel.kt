@@ -46,7 +46,7 @@ class Channel(val id: String, val name: String, val users: HashMap<String, ChatU
         }
 
         fun provideChannel(channelId: String, completion: (Channel?) -> Unit) {
-            FirebaseDatabase.getInstance().reference.child("channels").child(channelId).addListenerForSingleValueEvent(object : ValueEventListener {
+            FirebaseDatabase.getInstance().reference.child("chatlover").child("channels").child(channelId).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError?) {
                     completion(null)
                 }
