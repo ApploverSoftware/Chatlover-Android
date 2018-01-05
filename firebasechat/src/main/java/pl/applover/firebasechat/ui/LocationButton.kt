@@ -18,6 +18,7 @@ import android.util.AttributeSet
 import android.widget.ImageView
 import android.widget.Toast
 import pl.applover.firebasechat.R
+import pl.applover.firebasechat.config.ChatViewConfig
 
 /**
  * Created by sp0rk on 24/08/17.
@@ -69,7 +70,7 @@ class LocationButton @JvmOverloads constructor(
     }
 
     fun onLocationFound(l: Location?) {
-        Toast.makeText(context, "Click again to send your location", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, ChatViewConfig.locationFoundText, Toast.LENGTH_SHORT).show()
         setOnClickListener { sendLocation(l) }
         anim?.cancel()
         anim = null

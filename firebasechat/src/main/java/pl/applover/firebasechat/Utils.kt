@@ -2,6 +2,10 @@ package pl.applover.firebasechat
 
 import android.content.Context
 import android.location.Geocoder
+import android.support.annotation.DrawableRes
+import com.gturedi.views.CustomStateOptions
+import com.gturedi.views.R
+import com.gturedi.views.StatefulLayout
 import java.util.*
 
 /**
@@ -19,4 +23,10 @@ fun String.toAddressAsync(context: Context, completion: (address: String) -> Uni
         address += lines.getAddressLine(i) + "\n"
     }
     completion(address.trim())
+}
+
+fun StatefulLayout.showEmpty(message: String, @DrawableRes image: Int?) {
+    showCustom(CustomStateOptions()
+            .message(message)
+            .image(image ?: R.drawable.stf_ic_empty))
 }

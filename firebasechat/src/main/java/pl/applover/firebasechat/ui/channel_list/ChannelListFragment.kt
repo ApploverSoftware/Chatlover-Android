@@ -1,22 +1,30 @@
 package pl.applover.firebasechat.ui.channel_list
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import kotlinx.android.synthetic.main.fragment_channel_list.*
 import pl.applover.firebasechat.R
 import pl.applover.firebasechat.config.ChannelListConfig
 import pl.applover.firebasechat.model.Channel
+import pl.applover.firebasechat.showEmpty
 import pl.applover.firebasechat.ui.channel_list.ChannelAdapter.ChannelHolder.OnChannelClickListener
+
+
 
 /**
  * Created by sp0rk on 10/08/17.
  */
 class ChannelListFragment : Fragment(), OnChannelClickListener {
+
     var listener: ChannelListListener? = null
     lateinit var recyclerView: RecyclerView
     private var channelId: String? = null
@@ -25,6 +33,7 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
         channelId = arguments.getString("channelId")
         arguments.remove("channelId")
     }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater?.inflate(R.layout.fragment_channel_list, container, false)
         recyclerView = root!!.findViewById<RecyclerView>(R.id.list_recycler_view)
@@ -35,12 +44,19 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        chat_stateful.showEmpty("Brak aktywnych konwersacji", R.drawable.ic_empty_logo)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = ChannelAdapter(this)
+        recyclerView.adapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                chat_stateful.showContent()
+            }
+        })
 
         ChannelListConfig.onFragmentViewCreated?.invoke(view)
 
-        if (channelId?.isNotEmpty()?:false) {
+        if (channelId?.isNotEmpty() ?: false) {
             Channel.provideChannel(channelId!!) {
                 if (it != null) listener?.onChatRequested(it)
                 channelId = null
@@ -52,9 +68,31 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
         listener?.onChatRequested(channel)
     }
 
+    override fun onDelete(channel: Channel) {
+        listener?.onChatDeleted(channel)
+    }
+
+    override fun onBlock(channel: Channel) {
+        listener?.onChatBlocked(channel)
+    }
+
+    fun onChangeStart(){
+        chat_stateful.showLoading()
+    }
+
+    fun onChangeEnd(){
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (recyclerView.adapter.itemCount == 0)
+                chat_stateful.showEmpty("Brak aktywnych konwersacji", R.drawable.ic_empty_logo)
+            else
+                chat_stateful.showContent()
+        }, 250)
+    }
+
     fun withListener(listener: ChannelListListener) = this.also { this.listener = listener }
 
     companion object {
+        val TAG = "ChannelListFragment"
         fun newInstance(channelId: String? = null): ChannelListFragment {
             val fragment = ChannelListFragment()
             with(Bundle()) {
@@ -67,6 +105,8 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
 
     interface ChannelListListener {
         fun onChatRequested(channel: Channel)
+        fun onChatDeleted(channel: Channel)
+        fun onChatBlocked(channel: Channel)
     }
 
     override fun onDestroyView() {

@@ -55,4 +55,5 @@ object ChatViewConfig {
 
     var onFragmentViewCreated: ((View?, Channel) -> Unit)? = null
     var onBackPressed: (() -> Unit)? = null
+    var locationFoundText = "Click again to send your location"
 }

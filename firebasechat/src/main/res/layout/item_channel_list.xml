@@ -1,64 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/item_channel_divider"
+<com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chat_swipe_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/channel_list_divider"
-    android:paddingBottom="1dp">
+    android:background="@color/channel_list_item_background">
+    <!-- Bottom View Start-->
+    <LinearLayout
+        android:id="@+id/notifications_bottom_wrapper"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:layout_marginLeft="70dp"
+        android:clickable="true"
+        android:orientation="horizontal">
+        <!--What you want to show-->
+        <FrameLayout
+            android:id="@+id/swipe_delete"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:background="@color/swipe_light_gray"
+            android:foreground="?selectableItemBackground">
 
-    <RelativeLayout
-        android:id="@+id/item_channel_cell"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_delete" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Usuń"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/swipe_block"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:background="@color/swipe_dark_grey"
+            android:foreground="?selectableItemBackground">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_block" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Zablokuj"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+    <!-- Bottom View End-->
+
+    <!-- Surface View Start -->
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/item_channel_divider"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@color/channel_list_item_background"
-        android:foreground="?selectableItemBackground"
-        android:clickable="true">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/item_channel_icon"
-            android:layout_width="@dimen/channel_list_image_size"
-            android:layout_height="@dimen/channel_list_image_size"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="8dp"
-            android:src="@drawable/channel_placeholder" />
-
-        <TextView
-            android:id="@+id/item_channel_name"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/item_channel_cell"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_toRightOf="@id/item_channel_icon"
-            android:textSize="@dimen/item_channel_name_size"
-            android:textColor="@color/item_channel_name"
-            tools:text="Channel Name" />
+            android:layout_gravity="center"
+            android:background="@color/channel_list_item_background"
+            android:clickable="true"
+            android:foreground="?selectableItemBackground">
 
-        <TextView
-            android:id="@+id/item_channel_last_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/item_channel_name"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_toRightOf="@id/item_channel_icon"
-            android:ellipsize="end"
-            android:maxLines="2"
-            tools:text="Bacon ipsum dolor amet spare ribs salami picanha beef pork loin tongue frankfurter beef ribs pork belly meatloaf. Drumstick rump short ribs, landjaeger andouille boudin chuck tail. Pancetta strip steak shankle prosciutto burgdoggen."
-            android:textSize="@dimen/item_channel_last_msg_size"
-            android:textColor="@color/item_channel_last_msg"/>
+            <ImageView
+                android:id="@+id/swipe_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:src="@drawable/edit_icon" />
 
-        <TextView
-            android:id="@+id/item_channel_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="8dp"
-            android:text="11.08, 10:56"
-            android:textSize="@dimen/item_channel_time_size"
-            android:textColor="@color/item_channel_time"/>
+            <ImageView
+                android:id="@+id/item_channel_icon"
+                android:layout_width="@dimen/channel_list_image_size"
+                android:layout_height="@dimen/channel_list_image_size"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_margin="8dp"
+                android:src="@drawable/channel_placeholder" />
 
-    </RelativeLayout>
-</FrameLayout>
+            <TextView
+                android:id="@+id/item_channel_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/item_channel_icon"
+                android:textColor="@color/item_channel_name"
+                android:textSize="@dimen/item_channel_name_size"
+                tools:text="Channel Name" />
+
+            <TextView
+                android:id="@+id/item_channel_last_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/item_channel_name"
+                android:layout_toLeftOf="@id/swipe_icon"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@id/item_channel_icon"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/item_channel_last_msg"
+                android:textSize="@dimen/item_channel_last_msg_size"
+                tools:text="Bacon ipsum dolor amet spare ribs salami picanha beef pork loin tongue frankfurter beef ribs pork belly meatloaf. Drumstick rump short ribs, landjaeger andouille boudin chuck tail. Pancetta strip steak shankle prosciutto burgdoggen." />
+
+            <TextView
+                android:id="@+id/item_channel_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="8dp"
+                android:text="11.08, 10:56"
+                android:textColor="@color/item_channel_time"
+                android:textSize="@dimen/item_channel_time_size" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/item_channel_icon"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:background="@color/channel_list_divider" />
+
+        </RelativeLayout>
+    </FrameLayout>
+</com.daimajia.swipe.SwipeLayout>

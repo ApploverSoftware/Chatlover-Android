@@ -1,6 +1,7 @@
 package pl.applover.firebasechat.ui.channel_list
 
 import android.graphics.drawable.ColorDrawable
+import android.opengl.Visibility
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
@@ -12,6 +13,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import com.daimajia.swipe.SwipeLayout
 import com.firebase.ui.storage.images.FirebaseImageLoader
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
@@ -38,8 +40,7 @@ class ChannelAdapter(val listener: OnChannelClickListener)
     override fun populateItem(holder: ChannelHolder, previous: Channel?, model: Channel, next: Channel?, position: Int) {
         holder.bind(model,
                 position,
-                FirebaseStorage.getInstance().reference
-                        .child("chatlover").child("channel"),
+                FirebaseStorage.getInstance().reference,
                 listener)
     }
 
@@ -58,12 +59,45 @@ class ChannelAdapter(val listener: OnChannelClickListener)
         val cell: RelativeLayout? = itemView?.item_channel_cell
         val divider: FrameLayout? = itemView?.item_channel_divider
         val icon: ImageView? = itemView?.item_channel_icon
+        val swipe: SwipeLayout? = itemView?.chat_swipe_layout
+        var latestSwipe: SwipeLayout? = null
+        val delete: FrameLayout? = itemView?.swipe_delete
+        val block: FrameLayout? = itemView?.swipe_block
+        val swipeIcon: ImageView? = itemView?.swipe_icon
 
+        val onToggle = object : SwipeLayout.SwipeListener {
+            override fun onOpen(layout: SwipeLayout?) {}
+            override fun onUpdate(layout: SwipeLayout?, leftOffset: Int, topOffset: Int) {}
+            override fun onHandRelease(layout: SwipeLayout?, xvel: Float, yvel: Float) {}
+            override fun onStartClose(layout: SwipeLayout?) {}
+            override fun onClose(layout: SwipeLayout?) {}
+            override fun onStartOpen(layout: SwipeLayout?) {
+                if (latestSwipe != layout) {
+                    latestSwipe?.close()
+                    latestSwipe = layout
+                }
+            }
+        }
         fun bind(channel: Channel, position: Int, storage: StorageReference, listener: OnChannelClickListener) {
-            name?.text = ChannelListConfig.nameDecider?.invoke(channel)?:channel.name
+            name?.text = ChannelListConfig.nameDecider?.invoke(channel) ?: channel.name
+
+            delete?.setOnClickListener { listener.onDelete(channel) }
+            block?.setOnClickListener { listener.onBlock(channel) }
+            swipeIcon?.setOnClickListener { swipe?.toggle() }
+
+            swipe?.addSwipeListener(onToggle)
             if (channel.messageList.isNotEmpty()) {
-                lastMsg?.text = channel.messageList.last().body
-                time?.text = DateUtils.getRelativeTimeSpanString(channel.messageList.last().time)
+                with(channel.messageList.last()) {
+                    lastMsg?.text = body
+                    if (sender == "init") {
+                        lastMsg?.alpha = 0.5f
+                    }
+                }
+                time?.text =
+                        if (channel.messageList.last().sender != "init")
+                            DateUtils.getRelativeTimeSpanString(channel.messageList.last().time)
+                        else
+                            ""
             } else {
                 lastMsg?.text = ""
                 time?.text = ""
@@ -74,13 +108,19 @@ class ChannelAdapter(val listener: OnChannelClickListener)
                         .load(ChannelListConfig.pictureDecider?.invoke(
                                 channel,
                                 storage,
-                                FirebaseStorage.getInstance().reference
-                                        .child("chatlover").child("chat_user"))
-                                ?: storage.child(channel.id).child(channel.picture))
+                                FirebaseStorage.getInstance().reference)
+                                ?: FirebaseStorage.getInstance().reference
+                                .child("chatlover").child("chat_user"))
                         .placeholder(ChannelListConfig.picturePlaceholder ?: ContextCompat.getDrawable(icon!!.context, R.drawable.channel_placeholder))
                         .bitmapTransform(CircleTransformation(icon!!.context))
                         .into(icon)
-            } ?: icon?.setImageDrawable(ChannelListConfig.picturePlaceholder ?: ContextCompat.getDrawable(icon.context, R.drawable.channel_placeholder))
+            } ?: Glide.with(icon?.context)
+                    .using(FirebaseImageLoader())
+                    .load(ChannelListConfig.pictureDecider?.invoke(channel, storage, storage))
+                    .placeholder(ChannelListConfig.picturePlaceholder ?: ContextCompat.getDrawable(icon!!.context, R.drawable.channel_placeholder))
+                    .bitmapTransform(CircleTransformation(icon!!.context))
+                    .into(icon) ?:
+                    icon?.setImageDrawable(ChannelListConfig.picturePlaceholder ?: ContextCompat.getDrawable(icon.context, R.drawable.channel_placeholder))
             cell?.setOnClickListener { listener.onClick(channel) }
             designWithConfig()
         }
@@ -110,6 +150,8 @@ class ChannelAdapter(val listener: OnChannelClickListener)
 
         interface OnChannelClickListener {
             fun onClick(channel: Channel)
+            fun onDelete(channel: Channel)
+            fun onBlock(channel: Channel)
         }
     }
 }

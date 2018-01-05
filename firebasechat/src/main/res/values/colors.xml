@@ -18,4 +18,8 @@
     <color name="item_channel_name">#000</color>
     <color name="item_channel_last_msg">#8000</color>
     <color name="item_channel_time">#8000</color>
+
+
+    <color name="swipe_dark_grey">#242424</color>
+    <color name="swipe_light_gray">#939da1</color>
 </resources>

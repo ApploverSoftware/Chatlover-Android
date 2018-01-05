@@ -4,21 +4,19 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_chat.*
 import pl.applover.firebasechat.R
-import pl.applover.firebasechat.config.ChannelListConfig
 import pl.applover.firebasechat.config.ChatViewConfig
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.Message
@@ -30,12 +28,17 @@ import pl.applover.firebasechat.ui.LocationButton
 class ChatFragment : Fragment() {
     var listener: ChatListener? = null
     lateinit var recyclerView: RecyclerView
-    val input: EditText by lazy { chat_input_field }
-    val send: ImageView by lazy { chat_send_btn }
-    val sendLocation: LocationButton by lazy { chat_location_btn }
     val channel by lazy { arguments.getParcelable<Channel>("channel") }
     val currentUserId by lazy { arguments.getString("currentUserId") }
     lateinit var manager: LocationManager
+
+    override fun onPause() {
+        if (chat_input_field.hasFocus() || chat_input_field.hasWindowFocus()) {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(chat_input_field.windowToken, 0)
+        }
+        super.onPause()
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater?.inflate(R.layout.fragment_chat, container, false)
@@ -52,8 +55,14 @@ class ChatFragment : Fragment() {
         recyclerView.layoutManager = llm
         recyclerView.adapter = ChatAdapter(channel, currentUserId, llm, recyclerView).withAutoscroll()
 
-        send.setOnClickListener { onSend() }
-        sendLocation.setup(activity, manager, 3000) { l: Location? ->
+        designWithConfig()
+        ChatViewConfig.onFragmentViewCreated?.invoke(view, channel)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        chat_send_btn.setOnClickListener { onSend() }
+        chat_location_btn.setup(activity, manager, 3000) { l: Location? ->
             l?.let {
                 val db = FirebaseDatabase.getInstance().reference
                 with(db.child("channels").child(channel.id).child("messages").push()) {
@@ -68,21 +77,18 @@ class ChatFragment : Fragment() {
                 }
             } ?: Toast.makeText(context, "No location", Toast.LENGTH_SHORT).show()
         }
-        designWithConfig()
-        ChatViewConfig.onFragmentViewCreated?.invoke(view, channel)
     }
-
     fun onSend() {
-        if (input.text.isNotEmpty()) {
+        if (chat_input_field.text.toString().trim().isNotEmpty()) {
             val db = FirebaseDatabase.getInstance().reference
             with(db.child("channels").child(channel.id).child("messages").push()) {
                 ref.setValue(Message(
                         key,
                         currentUserId,
                         System.currentTimeMillis(),
-                        input.text.toString(),
+                        chat_input_field.text.toString().trim(),
                         Message.Type.txt)).addOnCompleteListener {
-                    input.setText("")
+                    chat_input_field.setText("")
                     recyclerView.layoutManager.scrollToPosition(recyclerView.adapter.itemCount - 1)
                 }
             }
@@ -90,10 +96,10 @@ class ChatFragment : Fragment() {
     }
 
     fun designWithConfig() {
-        send.setImageDrawable(ChatViewConfig.iconSend ?: ContextCompat.getDrawable(context, R.drawable.ic_send))
-        sendLocation.setImageDrawable(ChatViewConfig.iconLocation ?: ContextCompat.getDrawable(context, R.drawable.ic_location))
+        chat_send_btn.setImageDrawable(ChatViewConfig.iconSend ?: ContextCompat.getDrawable(context, R.drawable.ic_send))
+        chat_location_btn.setImageDrawable(ChatViewConfig.iconLocation ?: ContextCompat.getDrawable(context, R.drawable.ic_location))
 
-        with(input) {
+        with(chat_input_field) {
             background = ChatViewConfig.inputBackground ?: ContextCompat.getDrawable(context, R.drawable.chat_input_background)
             hint = ChatViewConfig.inputHint ?: context.getString(R.string.chat_input_hint)
             maxLines = ChatViewConfig.inputMaxLines ?: 4
@@ -106,6 +112,8 @@ class ChatFragment : Fragment() {
     fun withListener(listener: ChatListener) = this.also { this.listener = listener }
 
     companion object {
+        val TAG = "ChatFragment"
+
         fun newInstance(channel: Channel, currentUserId: String): ChatFragment {
             val fragment = ChatFragment()
             with(Bundle()) {

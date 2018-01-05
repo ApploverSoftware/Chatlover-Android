@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -58,8 +59,7 @@ class ChatAdapter(val channel: Channel,
                 channel,
                 position,
                 currentUserId == model.sender,
-                FirebaseStorage.getInstance().reference.child("chatlover")
-                        .child("chat_user"))
+                FirebaseStorage.getInstance().reference)
     }
 
     override fun populateHeader(holder: DayHeaderHolder, previous: Message?, next: Message?, position: Int) {
@@ -104,10 +104,12 @@ class ChatAdapter(val channel: Channel,
         val bubble = itemView?.item_message_bubble
         val lr = itemView?.item_message_lr
         val avatar = itemView?.item_message_avatar
+        val avatarEntry = itemView?.item_message_avatar_entry
         val time = itemView?.item_message_time
         val placeholder = ChatViewConfig.avatarPlaceholder ?: itemView!!.context?.getDrawable(R.drawable.user_placeholder)
-
+        lateinit var message: Message
         fun bind(message: Message, channel: Channel, position: Int, isOwnMsg: Boolean, storage: StorageReference) {
+            this.message = message
             var label = SimpleDateFormat(ChatViewConfig.labelTimeFormat
                     ?: "EEE HH:mm", Locale.getDefault()).format(message.time)
             if (!isOwnMsg)
@@ -116,11 +118,27 @@ class ChatAdapter(val channel: Channel,
                 }
             time?.text = label
             designWithConfig()
-            setDirection(channel.users[message.sender], isOwnMsg, storage)
-            setType(message, channel.users[message.sender])
             bubble?.setOnClickListener { onMsgClicked(message) }
             bubble?.setOnLongClickListener { onMsgLongClicked(message) }
+            setDirection(channel.users[message.sender], isOwnMsg, storage)
+            setType(message, channel.users[message.sender])
             avatar?.setOnClickListener { ChatViewConfig.avatarOnClick?.invoke(channel.users[message.sender]!!) }
+            if (avatarEntry?.visibility == VISIBLE) {
+                val other = channel.users.values.filterNot {
+                    it.uid == ChatUser.current?.uid
+                }.first()
+                avatarEntry.setOnClickListener {
+                    ChatViewConfig.avatarOnClick?.invoke(other)
+                }
+                other.avatar?.let {
+                    Glide.with(avatarEntry.context)
+                            .using(FirebaseImageLoader())
+                            .load(storage.child(other.uid).child("photos").child(other.avatar))
+                            .placeholder(placeholder)
+                            .bitmapTransform(CircleTransformation(avatarEntry.context))
+                            .into(avatarEntry)
+                } ?: avatarEntry.setImageDrawable(placeholder)
+            }
         }
 
         fun onMsgClicked(message: Message) {
@@ -172,11 +190,11 @@ class ChatAdapter(val channel: Channel,
             listOf(txtBlock, locBlock).forEach { it?.visibility = View.GONE }
             when (message.type) {
                 txt -> {
-                    txtBlock?.visibility = View.VISIBLE
+                    txtBlock?.visibility = VISIBLE
                     textBody?.text = message.body
                 }
                 loc -> {
-                    locBlock?.visibility = View.VISIBLE
+                    locBlock?.visibility = VISIBLE
                     locTitle?.text =
                             if (ChatUser.current!!.uid == message.sender) "You sent your location"
                             else "${user?.name} sent their location"
@@ -222,26 +240,49 @@ class ChatAdapter(val channel: Channel,
         }
 
         private fun setDirection(user: ChatUser?, isOwnMsg: Boolean, storage: StorageReference) {
-            if (isOwnMsg) {
-                avatar?.visibility = View.GONE
-                lr?.gravity = Gravity.END
-                bubble?.background?.setColorFilter(ChatViewConfig.bubbleColourOwn
-                        ?: bubble.resources.getColor(R.color.chat_item_bubble_own), PorterDuff.Mode.SRC_IN)
-            } else {
-                if (ChatViewConfig.avatarIsShown ?: true) {
-                    avatar?.visibility = View.VISIBLE
-                    user?.avatar?.let {
-                        Glide.with(avatar?.context)
-                                .using(FirebaseImageLoader())
-                                .load(storage.child(user.uid).child(user.avatar))
-                                .placeholder(placeholder)
-                                .bitmapTransform(CircleTransformation(avatar!!.context))
-                                .into(avatar)
-                    } ?: avatar?.setImageDrawable(placeholder)
+            when {
+                user == null -> {
+                    bubble?.setOnClickListener(null)
+                    bubble?.setOnLongClickListener(null)
+                    bubble?.isClickable = false
+                    bubble?.isLongClickable = false
+                    avatar?.visibility = View.GONE
+                    avatarEntry?.visibility = VISIBLE
+                    lr?.gravity = Gravity.CENTER_HORIZONTAL
+                    bubble?.background?.setColorFilter(0x00_00_00_00, PorterDuff.Mode.SRC_IN)
                 }
-                lr?.gravity = Gravity.START
-                bubble?.background?.setColorFilter(ChatViewConfig.bubbleColourOther
-                        ?: bubble.resources.getColor(R.color.chat_item_bubble_other), PorterDuff.Mode.SRC_IN)
+                isOwnMsg -> {
+                    bubble?.setOnClickListener { onMsgClicked(message) }
+                    bubble?.setOnLongClickListener { onMsgLongClicked(message) }
+                    bubble?.isClickable = true
+                    bubble?.isLongClickable = true
+                    avatar?.visibility = View.GONE
+                    avatarEntry?.visibility = View.GONE
+                    lr?.gravity = Gravity.END
+                    bubble?.background?.setColorFilter(ChatViewConfig.bubbleColourOwn
+                            ?: bubble.resources.getColor(R.color.chat_item_bubble_own), PorterDuff.Mode.SRC_IN)
+                }
+                else -> {
+                    bubble?.setOnClickListener { onMsgClicked(message) }
+                    bubble?.setOnLongClickListener { onMsgLongClicked(message) }
+                    bubble?.isLongClickable = true
+                    avatarEntry?.visibility = View.GONE
+                    bubble?.isClickable = true
+                    if (ChatViewConfig.avatarIsShown != false) {
+                        avatar?.visibility = VISIBLE
+                        user.avatar?.let {
+                            Glide.with(avatar?.context)
+                                    .using(FirebaseImageLoader())
+                                    .load(storage.child(user.uid).child("photos").child(user.avatar))
+                                    .placeholder(placeholder)
+                                    .bitmapTransform(CircleTransformation(avatar!!.context))
+                                    .into(avatar)
+                        } ?: avatar?.setImageDrawable(placeholder)
+                    }
+                    lr?.gravity = Gravity.START
+                    bubble?.background?.setColorFilter(ChatViewConfig.bubbleColourOther
+                            ?: bubble.resources.getColor(R.color.chat_item_bubble_other), PorterDuff.Mode.SRC_IN)
+                }
             }
 
         }
