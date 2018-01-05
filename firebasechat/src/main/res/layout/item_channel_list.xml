@@ -16,12 +16,13 @@
         android:orientation="horizontal">
         <!--What you want to show-->
         <FrameLayout
-            android:id="@+id/swipe_delete"
+            android:id="@+id/swipe_0"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="20"
+            android:layout_weight="1"
             android:background="@color/swipe_light_gray"
-            android:foreground="?selectableItemBackground">
+            android:foreground="?selectableItemBackground"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -46,12 +47,75 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/swipe_block"
+            android:id="@+id/swipe_1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="20"
+            android:layout_weight="1"
             android:background="@color/swipe_dark_grey"
-            android:foreground="?selectableItemBackground">
+            android:foreground="?selectableItemBackground"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_block" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Zablokuj"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/swipe_2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/swipe_light_gray"
+            android:foreground="?selectableItemBackground"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_delete" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Usuń"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/swipe_3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/swipe_dark_grey"
+            android:foreground="?selectableItemBackground"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -104,7 +168,8 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
-                android:src="@drawable/edit_icon" />
+                android:src="@drawable/edit_icon"
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/item_channel_icon"
@@ -130,9 +195,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/item_channel_name"
-                android:layout_toLeftOf="@id/swipe_icon"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="4dp"
+                android:layout_toLeftOf="@id/swipe_icon"
                 android:layout_toRightOf="@id/item_channel_icon"
                 android:ellipsize="end"
                 android:maxLines="2"

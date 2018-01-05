@@ -68,14 +68,6 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
         listener?.onChatRequested(channel)
     }
 
-    override fun onDelete(channel: Channel) {
-        listener?.onChatDeleted(channel)
-    }
-
-    override fun onBlock(channel: Channel) {
-        listener?.onChatBlocked(channel)
-    }
-
     fun onChangeStart(){
         chat_stateful.showLoading()
     }
@@ -105,8 +97,6 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
 
     interface ChannelListListener {
         fun onChatRequested(channel: Channel)
-        fun onChatDeleted(channel: Channel)
-        fun onChatBlocked(channel: Channel)
     }
 
     override fun onDestroyView() {

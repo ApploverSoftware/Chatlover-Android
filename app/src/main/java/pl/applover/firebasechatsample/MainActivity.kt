@@ -17,13 +17,6 @@ import pl.applover.firebasechat.ui.chat.ChatFragment.ChatListener
 
 
 class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
-    override fun onChatDeleted(channel: Channel) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onChatBlocked(channel: Channel) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
     override fun onChatRequested(channel: Channel) {
         supportFragmentManager

@@ -1,17 +1,13 @@
 package pl.applover.firebasechat.ui.channel_list
 
 import android.graphics.drawable.ColorDrawable
-import android.opengl.Visibility
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import com.bumptech.glide.Glide
 import com.daimajia.swipe.SwipeLayout
 import com.firebase.ui.storage.images.FirebaseImageLoader
@@ -61,8 +57,7 @@ class ChannelAdapter(val listener: OnChannelClickListener)
         val icon: ImageView? = itemView?.item_channel_icon
         val swipe: SwipeLayout? = itemView?.chat_swipe_layout
         var latestSwipe: SwipeLayout? = null
-        val delete: FrameLayout? = itemView?.swipe_delete
-        val block: FrameLayout? = itemView?.swipe_block
+        val swipes = listOf(itemView?.swipe_0, itemView?.swipe_1, itemView?.swipe_2, itemView?.swipe_3)
         val swipeIcon: ImageView? = itemView?.swipe_icon
 
         val onToggle = object : SwipeLayout.SwipeListener {
@@ -78,11 +73,15 @@ class ChannelAdapter(val listener: OnChannelClickListener)
                 }
             }
         }
+
         fun bind(channel: Channel, position: Int, storage: StorageReference, listener: OnChannelClickListener) {
             name?.text = ChannelListConfig.nameDecider?.invoke(channel) ?: channel.name
 
-            delete?.setOnClickListener { listener.onDelete(channel) }
-            block?.setOnClickListener { listener.onBlock(channel) }
+            if (ChannelListConfig.swipeActions.isEmpty())
+                swipe?.isSwipeEnabled = false
+            else
+                bindSwipeActions(channel)
+
             swipeIcon?.setOnClickListener { swipe?.toggle() }
 
             swipe?.addSwipeListener(onToggle)
@@ -125,7 +124,24 @@ class ChannelAdapter(val listener: OnChannelClickListener)
             designWithConfig()
         }
 
-        fun designWithConfig() {
+        private fun bindSwipeActions(channel: Channel) {
+            swipeIcon?.visibility = View.VISIBLE
+            ChannelListConfig.swipeActions.forEachIndexed { i, action ->
+                with(swipes[i]!!) {
+                    visibility = View.VISIBLE
+                    background = ColorDrawable(action.colour)
+                    with(getChildAt(0) as LinearLayout) {
+                        val icon = getChildAt(0) as ImageView
+                        val text = getChildAt(1) as TextView
+                        icon.setImageDrawable(action.icon)
+                        text.text = action.name
+                    }
+                    setOnClickListener { action.action(channel) }
+                }
+            }
+        }
+
+        private fun designWithConfig() {
             with(name!!) {
                 setTextSize(TypedValue.COMPLEX_UNIT_PX, ChannelListConfig.nameSize
                         ?: context.resources.getDimension(R.dimen.item_channel_name_size))
@@ -150,8 +166,6 @@ class ChannelAdapter(val listener: OnChannelClickListener)
 
         interface OnChannelClickListener {
             fun onClick(channel: Channel)
-            fun onDelete(channel: Channel)
-            fun onBlock(channel: Channel)
         }
     }
 }
