@@ -13,7 +13,7 @@ object ChannelListConfig {
     var pictureDecider: ((channel: Channel,
                           userRef: StorageReference,
                           channelRef: StorageReference) -> StorageReference)? = null
-    var pictureSize: Int? = null
+    var pictureSize: Float? = null
 
     var nameSize: Float? = null
     var nameColour: Int? = null

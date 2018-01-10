@@ -9,6 +9,7 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ResultCodes
 import com.google.firebase.auth.FirebaseAuth
 import pl.applover.firebasechat.config.ChannelListConfig
+import pl.applover.firebasechat.config.ChatViewConfig
 import pl.applover.firebasechat.config.NotificationsConfig
 import pl.applover.firebasechat.config.SwipeAction
 import pl.applover.firebasechat.model.Channel
@@ -58,10 +59,6 @@ class MainActivity : AppCompatActivity(), ChannelListListener {
                 Color.LTGRAY, getDrawable(R.drawable.stf_ic_offline), {
             Toast.makeText(this, "test action", Toast.LENGTH_SHORT).show()
         }))
-//        ChannelListConfig.nameSize = 18f
-//        ChannelListConfig.lastMsgSize = 18f
-//        ChannelListConfig.timeSize = 18f
-//        ChannelListConfig.pictureSize = 64
     }
 
     override fun onBackPressed() {

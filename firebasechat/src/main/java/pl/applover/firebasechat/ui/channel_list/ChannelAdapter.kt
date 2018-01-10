@@ -169,7 +169,7 @@ class ChannelAdapter(val listener: OnChannelClickListener)
                 setTextColor(ChannelListConfig.lastMsgColour ?: context.resources.getColor(R.color.item_channel_last_msg))
             }
             ChannelListConfig.pictureSize?.let {
-                convertDpToPixel(it.toFloat()).let {
+                convertDpToPixel(it).let {
                     with (icon?.layoutParams) {
                         this?.width = it
                         this?.height = it

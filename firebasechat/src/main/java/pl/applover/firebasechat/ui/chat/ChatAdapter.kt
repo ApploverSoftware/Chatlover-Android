@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.item_message_loc.view.*
 import kotlinx.android.synthetic.main.item_message_txt.view.*
 import pl.applover.firebasechat.R
 import pl.applover.firebasechat.config.ChatViewConfig
+import pl.applover.firebasechat.convertDpToPixel
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.ChatUser
 import pl.applover.firebasechat.model.Message
@@ -110,7 +111,7 @@ class ChatAdapter(val channel: Channel,
         lateinit var message: Message
         fun bind(message: Message, channel: Channel, position: Int, isOwnMsg: Boolean, storage: StorageReference) {
             this.message = message
-            var label = SimpleDateFormat(ChatViewConfig.labelTimeFormat
+            var label = SimpleDateFormat(ChatViewConfig.timeFormat
                     ?: "EEE HH:mm", Locale.getDefault()).format(message.time)
             if (!isOwnMsg)
                 channel.users[message.sender]?.let {
@@ -208,30 +209,40 @@ class ChatAdapter(val channel: Channel,
             }
         }
 
-        fun designWithConfig() {
+        private fun designWithConfig() {
             ChatViewConfig.avatarSize?.let {
-                avatar?.layoutParams = ViewGroup.LayoutParams(it, it)
+                convertDpToPixel(it).let {
+                    with (avatar?.layoutParams) {
+                        this?.width = it
+                        this?.height = it
+                        avatar?.layoutParams = this
+                    }
+                }
             }
             with(time!!) {
-                setTextColor(ChatViewConfig.labelColour ?: context.resources.getColor(R.color.chat_item_label))
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.labelSize
-                        ?: context.resources.getDimension(R.dimen.item_message_label_text_size))
-                if (!(ChatViewConfig.labelIsShown
+                ChatViewConfig.timeSize?.let {
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+                } ?: setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.item_message_label_text_size))
+                setTextColor(ChatViewConfig.timeColour ?: context.resources.getColor(R.color.chat_item_label))
+                if (!(ChatViewConfig.timeIsShown
                         ?: true)) visibility = View.GONE
             }
             with(textBody!!) {
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.textSize
-                        ?: context.resources.getDimension(R.dimen.item_message_text_size))
+                ChatViewConfig.textSize?.let {
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+                } ?: setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.item_message_text_size))
                 setTextColor(ChatViewConfig.textColour ?: context.resources.getColor(R.color.chat_item_text))
             }
             with(locTitle!!) {
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.textSize
-                        ?: context.resources.getDimension(R.dimen.item_message_text_size))
+                ChatViewConfig.textSize?.let {
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+                } ?: setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.item_message_text_size))
                 setTextColor(ChatViewConfig.textColour ?: context.resources.getColor(R.color.chat_item_text))
             }
             with(locAddress!!) {
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.textSizeSecondary
-                        ?: context.resources.getDimension(R.dimen.item_message_label_text_size))
+                ChatViewConfig.textSizeSecondary?.let {
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+                } ?: setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.item_message_label_text_size))
                 setTextColor(ChatViewConfig.textColourSecondary ?: context.resources.getColor(R.color.chat_item_text_secondary))
             }
             with(bubble!!) {
@@ -296,8 +307,9 @@ class ChatAdapter(val channel: Channel,
             if (!(ChatViewConfig.headerIsShown ?: true))
                 itemView.visibility = View.GONE
             label?.text = text
-            label?.setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.headerSize
-                    ?: label.context.resources.getDimension(R.dimen.header_text_size))
+            ChatViewConfig.headerSize?.let {
+                label?.setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+            } ?: label?.setTextSize(TypedValue.COMPLEX_UNIT_PX, label.context.resources.getDimension(R.dimen.header_text_size))
             label?.setTextColor(ChatViewConfig.headerColour
                     ?: label.context.resources.getColor(R.color.chat_day_header_color))
             lineLeft?.background = ColorDrawable(ChatViewConfig.headerColour

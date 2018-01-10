@@ -20,10 +20,10 @@ object ChatViewConfig {
     var textColour: Int? = null
     var textColourSecondary: Int? = null
 
-    var labelColour: Int? = null
-    var labelSize: Float? = null
-    var labelTimeFormat: String? = null
-    var labelIsShown: Boolean? = null
+    var timeColour: Int? = null
+    var timeSize: Float? = null
+    var timeFormat: String? = null
+    var timeIsShown: Boolean? = null
 
     var headerColour: Int? = null
     var headerSize: Float? = null
@@ -31,7 +31,7 @@ object ChatViewConfig {
     var headerTimeFormat: String? = null
 
     var avatarIsShown: Boolean? = null
-    var avatarSize: Int? = null
+    var avatarSize: Float? = null
     var avatarPlaceholder: Drawable? = null
     var avatarOnClick: ((ChatUser) -> Unit)? = null
 

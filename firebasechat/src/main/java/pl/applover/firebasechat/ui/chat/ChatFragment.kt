@@ -119,8 +119,9 @@ class ChatFragment : Fragment() {
             background = ChatViewConfig.inputBackground ?: ContextCompat.getDrawable(context, R.drawable.chat_input_background)
             hint = ChatViewConfig.inputHint ?: context.getString(R.string.chat_input_hint)
             maxLines = ChatViewConfig.inputMaxLines ?: 4
-            setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.inputTextSize
-                    ?: context.resources.getDimension(R.dimen.input_text_size))
+            ChatViewConfig.inputTextSize?.let {
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+            } ?: setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.input_text_size))
             setTextColor(ChatViewConfig.inputTextColour ?: context.resources.getColor(R.color.chat_input_text))
         }
     }
