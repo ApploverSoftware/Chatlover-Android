@@ -8,14 +8,14 @@ import android.widget.Toast
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ResultCodes
 import com.google.firebase.auth.FirebaseAuth
-import pl.applover.firebasechat.config.ChannelListConfig
-import pl.applover.firebasechat.config.NotificationsConfig
-import pl.applover.firebasechat.config.SwipeAction
-import pl.applover.firebasechat.model.Channel
-import pl.applover.firebasechat.model.ChatUser
-import pl.applover.firebasechat.ui.channel_list.ChannelListFragment
-import pl.applover.firebasechat.ui.channel_list.ChannelListFragment.ChannelListListener
-import pl.applover.firebasechat.ui.chat.ChatFragment
+import pl.applover.chatlover.config.ChannelListConfig
+import pl.applover.chatlover.config.NotificationsConfig
+import pl.applover.chatlover.config.SwipeAction
+import pl.applover.chatlover.model.Channel
+import pl.applover.chatlover.model.ChatUser
+import pl.applover.chatlover.ui.channel_list.ChannelListFragment
+import pl.applover.chatlover.ui.channel_list.ChannelListFragment.ChannelListListener
+import pl.applover.chatlover.ui.chat.ChatFragment
 
 
 class MainActivity : AppCompatActivity(), ChannelListListener {

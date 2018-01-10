@@ -1,1 +1,1 @@
-include ':app', ':firebasechat'
+include ':app', ':chatlover'
