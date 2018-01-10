@@ -1,4 +1,29 @@
 apply plugin: 'com.android.library'
+
+ext {
+    bintrayRepo = 'chatlover'
+    bintrayName = 'chatlover'
+
+    publishedGroupId = 'pl.applover'
+    libraryName = 'Chatlover'
+    artifact = 'chatlover'
+
+    libraryDescription = 'The Android library for our integrated Firebase chat solution'
+
+    siteUrl = 'https://github.com/ApploverSoftware/Chatlover-Android'
+    gitUrl = 'https://github.com/ApploverSoftware/Chatlover-Android.git'
+
+    libraryVersion = '0.9.1'
+
+    developerId = 'sp0rk'
+    developerName = 'Julian Jurec'
+    developerEmail = 'julian@applover.pl'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -52,3 +77,5 @@ repositories {
     mavenCentral()
 }
 
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
