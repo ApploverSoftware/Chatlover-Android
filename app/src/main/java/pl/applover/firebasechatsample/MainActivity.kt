@@ -58,6 +58,10 @@ class MainActivity : AppCompatActivity(), ChannelListListener {
                 Color.LTGRAY, getDrawable(R.drawable.stf_ic_offline), {
             Toast.makeText(this, "test action", Toast.LENGTH_SHORT).show()
         }))
+//        ChannelListConfig.nameSize = 18f
+//        ChannelListConfig.lastMsgSize = 18f
+//        ChannelListConfig.timeSize = 18f
+//        ChannelListConfig.pictureSize = 64
     }
 
     override fun onBackPressed() {

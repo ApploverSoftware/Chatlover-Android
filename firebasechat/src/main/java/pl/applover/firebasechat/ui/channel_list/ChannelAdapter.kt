@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView
 import android.text.format.DateUtils
 import android.util.TypedValue
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
 import com.bumptech.glide.Glide
 import com.daimajia.swipe.SwipeLayout
@@ -152,22 +151,32 @@ class ChannelAdapter(val listener: OnChannelClickListener)
 
         private fun designWithConfig() {
             with(name!!) {
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChannelListConfig.nameSize
-                        ?: context.resources.getDimension(R.dimen.item_channel_name_size))
+                ChannelListConfig.nameSize?.let {
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+                } ?: setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.item_channel_name_size))
                 setTextColor(ChannelListConfig.nameColour ?: context.resources.getColor(R.color.item_channel_name))
             }
             with(time!!) {
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChannelListConfig.timeSize
-                        ?: context.resources.getDimension(R.dimen.item_channel_time_size))
+                ChannelListConfig.timeSize?.let {
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+                } ?: setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.item_channel_time_size))
                 setTextColor(ChannelListConfig.timeColour ?: context.resources.getColor(R.color.item_channel_time))
             }
             with(lastMsg!!) {
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChannelListConfig.lastMsgSize
-                        ?: context.resources.getDimension(R.dimen.item_channel_last_msg_size))
+                ChannelListConfig.lastMsgSize?.let {
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, it)
+                } ?: setTextSize(TypedValue.COMPLEX_UNIT_PX, context.resources.getDimension(R.dimen.item_channel_last_msg_size))
                 setTextColor(ChannelListConfig.lastMsgColour ?: context.resources.getColor(R.color.item_channel_last_msg))
             }
             ChannelListConfig.pictureSize?.let {
-                icon?.layoutParams = ViewGroup.LayoutParams(it, it)
+                convertDpToPixel(it.toFloat()).let {
+                    with (icon?.layoutParams) {
+                        this?.width = it
+                        this?.height = it
+                        icon?.layoutParams = this
+                    }
+//                    icon?.layoutParams = RelativeLayout.LayoutParams(it, it)
+                }
             }
             cell!!.background = ColorDrawable((ChannelListConfig.itemBackground ?: cell.context.resources.getColor(R.color.channel_list_item_background)))
             divider!!.background = ColorDrawable((ChannelListConfig.dividerColour ?: cell.context.resources.getColor(R.color.channel_list_divider)))
