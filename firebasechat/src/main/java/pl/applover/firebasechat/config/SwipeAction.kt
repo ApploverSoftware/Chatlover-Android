@@ -11,5 +11,5 @@ data class SwipeAction<in T>(
         @ColorInt val bgColour: Int,
         @ColorInt val textColour: Int,
         val icon: Drawable,
-        val action: (T)->Unit
+        val action: (T) -> Unit
 )

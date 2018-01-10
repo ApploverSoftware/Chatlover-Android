@@ -65,7 +65,7 @@ data class ChatUser(val uid: String, val name: String, var fcmToken: String? = n
             FirebaseInstanceId.getInstance().token?.let {
                 if (it.isNotEmpty()) {
                     current?.fcmToken = it
-                    FirebaseDatabase.getInstance().reference.child("chatlover").child("chat_users").child(current!!.uid).child("fcmToken").setValue(it).addOnCompleteListener{completion?.invoke()}
+                    FirebaseDatabase.getInstance().reference.child("chatlover").child("chat_users").child(current!!.uid).child("fcmToken").setValue(it).addOnCompleteListener { completion?.invoke() }
                 }
             }
         }

@@ -18,7 +18,7 @@ import pl.applover.firebasechat.model.Message
 /**
  * Created by sp0rk on 15/08/17.
  */
-class FirebaseChatMessagingService : FirebaseMessagingService() {
+class ChatloverMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         super.onMessageReceived(remoteMessage)

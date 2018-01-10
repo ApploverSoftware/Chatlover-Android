@@ -17,13 +17,13 @@
             </intent-filter>
         </activity>
         <service
-            android:name="pl.applover.firebasechat.services.FirebaseChatMessagingService">
+            android:name="pl.applover.firebasechat.services.ChatloverMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
         <service
-            android:name="pl.applover.firebasechat.services.FirebaseChatInstanceIdService">
+            android:name="pl.applover.firebasechat.services.ChatloverInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>

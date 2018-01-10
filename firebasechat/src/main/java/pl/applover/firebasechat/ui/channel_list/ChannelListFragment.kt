@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -17,7 +16,6 @@ import pl.applover.firebasechat.config.ChannelListConfig
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.showEmpty
 import pl.applover.firebasechat.ui.channel_list.ChannelAdapter.ChannelHolder.OnChannelClickListener
-
 
 
 /**
@@ -68,11 +66,11 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
         listener?.onChatRequested(channel)
     }
 
-    fun onChangeStart(){
+    fun onChangeStart() {
         chat_stateful.showLoading()
     }
 
-    fun onChangeEnd(){
+    fun onChangeEnd() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (recyclerView.adapter.itemCount == 0)
                 chat_stateful.showEmpty("Brak aktywnych konwersacji", R.drawable.ic_empty_logo)

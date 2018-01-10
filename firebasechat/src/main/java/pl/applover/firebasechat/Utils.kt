@@ -8,8 +8,6 @@ import com.gturedi.views.CustomStateOptions
 import com.gturedi.views.R
 import com.gturedi.views.StatefulLayout
 import java.util.*
-import android.util.DisplayMetrics
-
 
 
 /**

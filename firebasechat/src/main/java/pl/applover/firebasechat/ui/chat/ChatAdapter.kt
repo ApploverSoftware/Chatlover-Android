@@ -14,7 +14,6 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.View.VISIBLE
-import android.view.ViewGroup
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.firebase.ui.storage.images.FirebaseImageLoader
@@ -212,7 +211,7 @@ class ChatAdapter(val channel: Channel,
         private fun designWithConfig() {
             ChatViewConfig.avatarSize?.let {
                 convertDpToPixel(it).let {
-                    with (avatar?.layoutParams) {
+                    with(avatar?.layoutParams) {
                         this?.width = it
                         this?.height = it
                         avatar?.layoutParams = this

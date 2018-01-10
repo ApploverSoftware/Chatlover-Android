@@ -7,9 +7,9 @@ import pl.applover.firebasechat.model.ChatUser
 /**
  * Created by sp0rk on 15/08/17.
  */
-class FirebaseChatInstanceIdService : FirebaseInstanceIdService() {
+class ChatloverInstanceIdService : FirebaseInstanceIdService() {
     override fun onTokenRefresh() {
         super.onTokenRefresh()
-        NotificationsConfig.onTokenRefresh?.invoke()?:ChatUser.refreshCurrentToken()
+        NotificationsConfig.onTokenRefresh?.invoke() ?: ChatUser.refreshCurrentToken()
     }
 }

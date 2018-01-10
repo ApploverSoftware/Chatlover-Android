@@ -9,7 +9,6 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ResultCodes
 import com.google.firebase.auth.FirebaseAuth
 import pl.applover.firebasechat.config.ChannelListConfig
-import pl.applover.firebasechat.config.ChatViewConfig
 import pl.applover.firebasechat.config.NotificationsConfig
 import pl.applover.firebasechat.config.SwipeAction
 import pl.applover.firebasechat.model.Channel

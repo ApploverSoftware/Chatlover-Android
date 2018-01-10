@@ -170,7 +170,7 @@ class ChannelAdapter(val listener: OnChannelClickListener)
             }
             ChannelListConfig.pictureSize?.let {
                 convertDpToPixel(it).let {
-                    with (icon?.layoutParams) {
+                    with(icon?.layoutParams) {
                         this?.width = it
                         this?.height = it
                         icon?.layoutParams = this
