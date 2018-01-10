@@ -6,13 +6,12 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_chat.*
@@ -20,13 +19,11 @@ import pl.applover.firebasechat.R
 import pl.applover.firebasechat.config.ChatViewConfig
 import pl.applover.firebasechat.model.Channel
 import pl.applover.firebasechat.model.Message
-import pl.applover.firebasechat.ui.LocationButton
 
 /**
  * Created by sp0rk on 11/08/17.
  */
 class ChatFragment : Fragment() {
-    var listener: ChatListener? = null
     lateinit var recyclerView: RecyclerView
     val channel by lazy { arguments.getParcelable<Channel>("channel") }
     val currentUserId by lazy { arguments.getString("currentUserId") }
@@ -40,12 +37,30 @@ class ChatFragment : Fragment() {
         super.onPause()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (ChatViewConfig.onBackPressed != null).let {
+            setHasOptionsMenu(it)
+            getParentActivity(this).supportActionBar?.setDisplayHomeAsUpEnabled(it)
+        }
+    }
+
+    override fun onDestroy() {
+        (ChatViewConfig.onBackPressed != null).let {
+            setHasOptionsMenu(false)
+            getParentActivity(this).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
+        super.onDestroy()
+    }
+
+    private fun getParentActivity(fragment: Fragment): AppCompatActivity =
+            fragment.activity as? AppCompatActivity ?: getParentActivity(parentFragment)
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater?.inflate(R.layout.fragment_chat, container, false)
         recyclerView = root!!.findViewById<RecyclerView>(R.id.chat_recycler_view)
         manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        setHasOptionsMenu(ChatViewConfig.onBackPressed!=null)
         return root
     }
 
@@ -78,6 +93,7 @@ class ChatFragment : Fragment() {
             } ?: Toast.makeText(context, "No location", Toast.LENGTH_SHORT).show()
         }
     }
+
     fun onSend() {
         if (chat_input_field.text.toString().trim().isNotEmpty()) {
             val db = FirebaseDatabase.getInstance().reference
@@ -109,8 +125,6 @@ class ChatFragment : Fragment() {
         }
     }
 
-    fun withListener(listener: ChatListener) = this.also { this.listener = listener }
-
     companion object {
         val TAG = "ChatloverChatFragment"
 
@@ -137,6 +151,4 @@ class ChatFragment : Fragment() {
         super.onDestroyView()
         (recyclerView.adapter as? ChatAdapter)?.destroy()
     }
-
-    interface ChatListener
 }

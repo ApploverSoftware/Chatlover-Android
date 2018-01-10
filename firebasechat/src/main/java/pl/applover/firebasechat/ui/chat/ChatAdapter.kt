@@ -230,7 +230,7 @@ class ChatAdapter(val channel: Channel,
                 setTextColor(ChatViewConfig.textColour ?: context.resources.getColor(R.color.chat_item_text))
             }
             with(locAddress!!) {
-                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.textSize
+                setTextSize(TypedValue.COMPLEX_UNIT_PX, ChatViewConfig.textSizeSecondary
                         ?: context.resources.getDimension(R.dimen.item_message_label_text_size))
                 setTextColor(ChatViewConfig.textColourSecondary ?: context.resources.getColor(R.color.chat_item_text_secondary))
             }

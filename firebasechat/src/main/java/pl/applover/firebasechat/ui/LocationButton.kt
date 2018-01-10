@@ -70,7 +70,8 @@ class LocationButton @JvmOverloads constructor(
     }
 
     fun onLocationFound(l: Location?) {
-        Toast.makeText(context, ChatViewConfig.locationFoundText, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, ChatViewConfig.locationFoundText ?:
+                "Click again to send your location", Toast.LENGTH_SHORT).show()
         setOnClickListener { sendLocation(l) }
         anim?.cancel()
         anim = null

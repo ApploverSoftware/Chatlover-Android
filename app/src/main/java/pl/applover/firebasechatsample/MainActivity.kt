@@ -16,15 +16,14 @@ import pl.applover.firebasechat.model.ChatUser
 import pl.applover.firebasechat.ui.channel_list.ChannelListFragment
 import pl.applover.firebasechat.ui.channel_list.ChannelListFragment.ChannelListListener
 import pl.applover.firebasechat.ui.chat.ChatFragment
-import pl.applover.firebasechat.ui.chat.ChatFragment.ChatListener
 
 
-class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
+class MainActivity : AppCompatActivity(), ChannelListListener {
 
     override fun onChatRequested(channel: Channel) {
         supportFragmentManager
                 .beginTransaction()
-                .add(R.id.container, ChatFragment.newInstance(channel, ChatUser.current?.uid ?: "").withListener(this))
+                .add(R.id.container, ChatFragment.newInstance(channel, ChatUser.current?.uid ?: ""))
                 .addToBackStack(ChatFragment.TAG)
                 .commit()
     }
@@ -42,6 +41,11 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
 
     private fun config() {
         NotificationsConfig.notificationTarget = MainActivity::class.java
+        ChannelListConfig.nameDecider = {
+            it.userList.firstOrNull {
+                it.uid != ChatUser.current?.uid
+            }?.name ?: ""
+        }
         ChannelListConfig.pictureDecider = { c, s, cs ->
             c.userList.find { it.uid != ChatUser.current?.uid }?.let {
                 return@let s.child("chatlover").child("chat_user").child(it.uid).child(it.avatar ?: "ERROR")
@@ -50,7 +54,7 @@ class MainActivity : AppCompatActivity(), ChannelListListener, ChatListener {
         ChannelListConfig.swipeActions = listOf(SwipeAction("Test", Color.LTGRAY,
                 Color.DKGRAY, getDrawable(R.drawable.stf_ic_empty), {
             Toast.makeText(this, "test action", Toast.LENGTH_SHORT).show()
-        }),SwipeAction("Test2", Color.DKGRAY,
+        }), SwipeAction("Test2", Color.DKGRAY,
                 Color.LTGRAY, getDrawable(R.drawable.stf_ic_offline), {
             Toast.makeText(this, "test action", Toast.LENGTH_SHORT).show()
         }))

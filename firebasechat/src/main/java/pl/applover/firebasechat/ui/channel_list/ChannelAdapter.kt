@@ -79,7 +79,7 @@ class ChannelAdapter(val listener: OnChannelClickListener)
         fun bind(channel: Channel, position: Int, storage: StorageReference, listener: OnChannelClickListener) {
             name?.text = ChannelListConfig.nameDecider?.invoke(channel) ?: channel.name
 
-            if (ChannelListConfig.swipeActions.isEmpty())
+            if (ChannelListConfig.swipeActions?.isEmpty() ?: true)
                 swipe?.isSwipeEnabled = false
             else
                 bindSwipeActions(channel)
@@ -127,21 +127,25 @@ class ChannelAdapter(val listener: OnChannelClickListener)
         }
 
         private fun bindSwipeActions(channel: Channel) {
-            swipeDrawer?.layoutParams = FrameLayout.LayoutParams(convertDpToPixel(ChannelListConfig.swipeActions.size * ChannelListConfig.swipeActionWidth),
+            swipeDrawer?.layoutParams = FrameLayout.LayoutParams(convertDpToPixel(
+                    (ChannelListConfig.swipeActions ?: ArrayList()).size *
+                            (ChannelListConfig.swipeActionWidth ?: 48f)),
                     FrameLayout.LayoutParams.MATCH_PARENT)
             swipeIcon?.visibility = View.VISIBLE
-            ChannelListConfig.swipeActions.forEachIndexed { i, action ->
-                with(swipes[i]!!) {
-                    visibility = View.VISIBLE
-                    background = ColorDrawable(action.bgColour)
-                    with(getChildAt(0) as LinearLayout) {
-                        val icon = getChildAt(0) as ImageView
-                        val text = getChildAt(1) as TextView
-                        icon.setImageDrawable(action.icon)
-                        text.text = action.name
-                        text.setTextColor(action.textColour)
+            ChannelListConfig.swipeActions?.let {
+                it.forEachIndexed { i, action ->
+                    with(swipes[i]!!) {
+                        visibility = View.VISIBLE
+                        background = ColorDrawable(action.bgColour)
+                        with(getChildAt(0) as LinearLayout) {
+                            val icon = getChildAt(0) as ImageView
+                            val text = getChildAt(1) as TextView
+                            icon.setImageDrawable(action.icon)
+                            text.text = action.name
+                            text.setTextColor(action.textColour)
+                        }
+                        setOnClickListener { action.action(channel) }
                     }
-                    setOnClickListener { action.action(channel) }
                 }
             }
         }

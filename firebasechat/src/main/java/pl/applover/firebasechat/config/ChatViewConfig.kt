@@ -16,6 +16,7 @@ object ChatViewConfig {
     var bubbleColourOther: Int? = null
 
     var textSize: Float? = null
+    var textSizeSecondary: Float? = null
     var textColour: Int? = null
     var textColourSecondary: Int? = null
 
@@ -42,11 +43,6 @@ object ChatViewConfig {
 
     var iconSend: Drawable? = null
     var iconLocation: Drawable? = null
-//    var iconImage: Drawable? = null
-//    var iconVideo: Drawable? = null
-//    var iconVoice: Drawable? = null
-//    var iconMessageType: Drawable? = null
-//    var messageTypes: List<Message.Type>? = null
 
     var onTxtClick: ((message: Message, context: Context) -> Unit)? = null
     var onTxtLongClick: ((message: Message, context: Context) -> Unit)? = null
@@ -55,5 +51,5 @@ object ChatViewConfig {
 
     var onFragmentViewCreated: ((View?, Channel) -> Unit)? = null
     var onBackPressed: (() -> Unit)? = null
-    var locationFoundText = "Click again to send your location"
+    var locationFoundText: String? = null
 }

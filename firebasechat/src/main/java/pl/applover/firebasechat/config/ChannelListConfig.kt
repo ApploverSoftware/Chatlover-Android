@@ -28,14 +28,16 @@ object ChannelListConfig {
     var itemBackground: Int? = null
     var dividerColour: Int? = null
 
-    var onFragmentViewCreated: ((View?)->Unit)? = null
+    var onFragmentViewCreated: ((View?) -> Unit)? = null
 
-    var swipeActions: List<SwipeAction<Channel>> = ArrayList()
+    var swipeActions: List<SwipeAction<Channel>>? = null
         set(value) {
-            if (value.size <= 4) field = value
-            else throw IllegalStateException("Maximum number of swipe actions is 4")
+            field = if (value == null) null else {
+                if (value.size <= 4) value
+                else throw IllegalStateException("Maximum number of swipe actions is 4")
+            }
         }
 
-    var swipeActionWidth: Float = 48f
+    var swipeActionWidth: Float? = null
 
 }
