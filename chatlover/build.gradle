@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/ApploverSoftware/Chatlover-Android'
     gitUrl = 'https://github.com/ApploverSoftware/Chatlover-Android.git'
 
-    libraryVersion = '0.9.1'
+    libraryVersion = '0.10.0'
 
     developerId = 'sp0rk'
     developerName = 'Julian Jurec'
@@ -35,8 +35,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "0.10.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
