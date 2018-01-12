@@ -15,8 +15,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.View.VISIBLE
 import android.widget.Toast
-import com.bumptech.glide.Glide
-import com.firebase.ui.storage.images.FirebaseImageLoader
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -32,7 +31,7 @@ import pl.applover.chatlover.model.ChatUser
 import pl.applover.chatlover.model.Message
 import pl.applover.chatlover.model.Message.Type.*
 import pl.applover.chatlover.toAddressAsync
-import pl.applover.chatlover.ui.CircleTransformation
+import pl.applover.chatlover.ui.GlideApp
 import pl.applover.chatlover.ui.HeaderedFirebaseAdapter
 import pl.applover.chatlover.ui.chat.ChatAdapter.DayHeaderHolder
 import pl.applover.chatlover.ui.chat.ChatAdapter.MessageHolder
@@ -131,11 +130,10 @@ class ChatAdapter(val channel: Channel,
                     ChatViewConfig.avatarOnClick?.invoke(other)
                 }
                 other.avatar?.let {
-                    Glide.with(avatarEntry.context)
-                            .using(FirebaseImageLoader())
+                    GlideApp.with(avatarEntry.context)
                             .load(storage.child("chatlover").child("chat_user").child(other.uid).child(other.avatar))
                             .placeholder(placeholder)
-                            .bitmapTransform(CircleTransformation(avatarEntry.context))
+                            .apply(RequestOptions.circleCropTransform())
                             .into(avatarEntry)
                 } ?: avatarEntry.setImageDrawable(placeholder)
             }
@@ -281,11 +279,10 @@ class ChatAdapter(val channel: Channel,
                     if (ChatViewConfig.avatarIsShown != false) {
                         avatar?.visibility = VISIBLE
                         user.avatar?.let {
-                            Glide.with(avatar?.context)
-                                    .using(FirebaseImageLoader())
+                            GlideApp.with(avatar?.context)
                                     .load(storage.child("chatlover").child("chat_user").child(user.uid).child(user.avatar))
                                     .placeholder(placeholder)
-                                    .bitmapTransform(CircleTransformation(avatar!!.context))
+                                    .apply(RequestOptions.circleCropTransform())
                                     .into(avatar)
                         } ?: avatar?.setImageDrawable(placeholder)
                     }

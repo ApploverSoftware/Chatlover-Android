@@ -40,15 +40,15 @@ class ChatloverMessagingService : FirebaseMessagingService() {
                         intent, PendingIntent.FLAG_ONE_SHOT)
 
                 val notification = NotificationsConfig.notificationCreator?.invoke(
-                        remoteMessage.notification.title,
-                        remoteMessage.notification.body,
+                        remoteMessage.notification?.title,
+                        remoteMessage.notification?.body,
                         Gson().fromJson(data.getString("message"), Message::class.java),
                         channel,
                         Gson().fromJson(data.getString("sender"), ChatUser::class.java)
                 ) ?: NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_location)
-                        .setContentTitle(remoteMessage.notification.title)
-                        .setContentText(remoteMessage.notification.body)
+                        .setContentTitle(remoteMessage.notification?.title)
+                        .setContentText(remoteMessage.notification?.body)
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent).build()
 

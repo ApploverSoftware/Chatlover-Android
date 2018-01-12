@@ -28,19 +28,19 @@ class ChannelListFragment : Fragment(), OnChannelClickListener {
     private var channelId: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        channelId = arguments.getString("channelId")
-        arguments.remove("channelId")
+        channelId = arguments?.getString("channelId")
+        arguments?.remove("channelId")
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater?.inflate(R.layout.fragment_channel_list, container, false)
         recyclerView = root!!.findViewById<RecyclerView>(R.id.list_recycler_view)
-        activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         return root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         chat_stateful.showEmpty("Brak aktywnych konwersacji", R.drawable.ic_empty_logo)
         recyclerView.layoutManager = LinearLayoutManager(context)

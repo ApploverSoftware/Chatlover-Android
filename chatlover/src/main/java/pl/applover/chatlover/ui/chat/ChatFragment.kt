@@ -25,13 +25,13 @@ import pl.applover.chatlover.model.Message
  */
 class ChatFragment : Fragment() {
     lateinit var recyclerView: RecyclerView
-    val channel by lazy { arguments.getParcelable<Channel>("channel") }
-    val currentUserId by lazy { arguments.getString("currentUserId") }
+    val channel by lazy { arguments!!.getParcelable<Channel>("channel") }
+    val currentUserId by lazy { arguments!!.getString("currentUserId") }
     lateinit var manager: LocationManager
 
     override fun onPause() {
         if (chat_input_field.hasFocus() || chat_input_field.hasWindowFocus()) {
-            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(chat_input_field.windowToken, 0)
         }
         super.onPause()
@@ -53,18 +53,18 @@ class ChatFragment : Fragment() {
         super.onDestroy()
     }
 
-    private fun getParentActivity(fragment: Fragment): AppCompatActivity =
-            fragment.activity as? AppCompatActivity ?: getParentActivity(parentFragment)
+    private fun getParentActivity(fragment: Fragment?): AppCompatActivity =
+            fragment?.activity as? AppCompatActivity ?: getParentActivity(parentFragment)
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater?.inflate(R.layout.fragment_chat, container, false)
         recyclerView = root!!.findViewById<RecyclerView>(R.id.chat_recycler_view)
-        manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        activity.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        manager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         return root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val llm = LinearLayoutManager(context).apply { stackFromEnd = true }
         recyclerView.layoutManager = llm
@@ -77,13 +77,13 @@ class ChatFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         chat_send_btn.setOnClickListener { onSend() }
-        chat_location_btn.setup(activity, manager, 3000) { l: Location? ->
+        chat_location_btn.setup(activity!!, manager, 3000) { l: Location? ->
             l?.let {
                 val db = FirebaseDatabase.getInstance().reference
                 with(db.child("chatlover").child("channels").child(channel.id).child("messages").push()) {
                     ref.setValue(Message(
                             key,
-                            currentUserId,
+                            currentUserId!!,
                             System.currentTimeMillis(),
                             "${it.latitude}/${it.longitude}",
                             Message.Type.loc)).addOnCompleteListener {
@@ -112,8 +112,8 @@ class ChatFragment : Fragment() {
     }
 
     fun designWithConfig() {
-        chat_send_btn.setImageDrawable(ChatViewConfig.iconSend ?: ContextCompat.getDrawable(context, R.drawable.ic_send))
-        chat_location_btn.setImageDrawable(ChatViewConfig.iconLocation ?: ContextCompat.getDrawable(context, R.drawable.ic_location))
+        chat_send_btn.setImageDrawable(ChatViewConfig.iconSend ?: ContextCompat.getDrawable(context!!, R.drawable.ic_send))
+        chat_location_btn.setImageDrawable(ChatViewConfig.iconLocation ?: ContextCompat.getDrawable(context!!, R.drawable.ic_location))
 
         with(chat_input_field) {
             background = ChatViewConfig.inputBackground ?: ContextCompat.getDrawable(context, R.drawable.chat_input_background)

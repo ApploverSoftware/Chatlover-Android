@@ -7,9 +7,8 @@ import android.text.format.DateUtils
 import android.util.TypedValue
 import android.view.View
 import android.widget.*
-import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.daimajia.swipe.SwipeLayout
-import com.firebase.ui.storage.images.FirebaseImageLoader
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -19,7 +18,7 @@ import pl.applover.chatlover.config.ChannelListConfig
 import pl.applover.chatlover.convertDpToPixel
 import pl.applover.chatlover.model.Channel
 import pl.applover.chatlover.model.ChatUser
-import pl.applover.chatlover.ui.CircleTransformation
+import pl.applover.chatlover.ui.GlideApp
 import pl.applover.chatlover.ui.HeaderedFirebaseAdapter
 import pl.applover.chatlover.ui.channel_list.ChannelAdapter.ChannelHolder
 import pl.applover.chatlover.ui.channel_list.ChannelAdapter.ChannelHolder.OnChannelClickListener
@@ -103,8 +102,7 @@ class ChannelAdapter(val listener: OnChannelClickListener)
                 time?.text = ""
             }
             channel.picture?.let {
-                Glide.with(icon?.context)
-                        .using(FirebaseImageLoader())
+                GlideApp.with(icon?.context)
                         .load(ChannelListConfig.pictureDecider?.invoke(
                                 channel,
                                 storage,
@@ -112,13 +110,12 @@ class ChannelAdapter(val listener: OnChannelClickListener)
                                 ?: FirebaseStorage.getInstance().reference
                                 .child("chatlover").child("chat_user"))
                         .placeholder(ChannelListConfig.picturePlaceholder ?: ContextCompat.getDrawable(icon!!.context, R.drawable.channel_placeholder))
-                        .bitmapTransform(CircleTransformation(icon!!.context))
+                        .apply(RequestOptions.circleCropTransform())
                         .into(icon)
-            } ?: Glide.with(icon?.context)
-                    .using(FirebaseImageLoader())
+            } ?: GlideApp.with(icon?.context)
                     .load(ChannelListConfig.pictureDecider?.invoke(channel, storage, storage))
                     .placeholder(ChannelListConfig.picturePlaceholder ?: ContextCompat.getDrawable(icon!!.context, R.drawable.channel_placeholder))
-                    .bitmapTransform(CircleTransformation(icon!!.context))
+                    .apply(RequestOptions.circleCropTransform())
                     .into(icon) ?:
                     icon?.setImageDrawable(ChannelListConfig.picturePlaceholder ?: ContextCompat.getDrawable(icon.context, R.drawable.channel_placeholder))
             cell?.setOnClickListener { listener.onClick(channel) }
