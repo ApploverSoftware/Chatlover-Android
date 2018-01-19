@@ -1,28 +1,5 @@
 apply plugin: 'com.android.library'
-
-ext {
-    bintrayRepo = 'chatlover'
-    bintrayName = 'chatlover'
-
-    publishedGroupId = 'pl.applover'
-    libraryName = 'Chatlover'
-    artifact = 'chatlover'
-
-    libraryDescription = 'The Android library for our integrated Firebase chat solution'
-
-    siteUrl = 'https://github.com/ApploverSoftware/Chatlover-Android'
-    gitUrl = 'https://github.com/ApploverSoftware/Chatlover-Android.git'
-
-    libraryVersion = '0.10.0'
-
-    developerId = 'sp0rk'
-    developerName = 'Julian Jurec'
-    developerEmail = 'julian@applover.pl'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
+apply from: 'mavenpush.gradle'
 
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -31,12 +8,11 @@ android {
     compileSdkVersion 27
     buildToolsVersion '26.0.2'
 
-
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 2
-        versionName "0.10.0"
+        versionCode 5
+        versionName "0.13.1"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -73,8 +49,5 @@ dependencies {
 repositories {
     mavenCentral()
 }
-
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
 
 apply plugin: 'kotlin-kapt'
